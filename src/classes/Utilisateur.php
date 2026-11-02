@@ -5,11 +5,13 @@ namespace iutnc\touiteur\classes;
 /** classe pour l'utilisateur */
 class Utilisateur
 {
-    private string $pseudo;
-    private array $touites;
+    private string $pseudo; // le nom d'utilisateur
+    private array $touites; //  le poste de l'utilisateur
 
     /**
      * Constructeur qui construit un utilisateur
+     * @param pseudo du touites
+     * @param touites de l'utilisateur
      */
     public function __construct($pseudo, array $touites = [])
     {
@@ -20,6 +22,7 @@ class Utilisateur
 
     public function getPseudo(): string
     {
+        // on retourne le pseudo de l'utilisateur
         return $this->pseudo;
     }
 
