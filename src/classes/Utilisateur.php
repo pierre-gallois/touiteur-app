@@ -2,25 +2,26 @@
 
 namespace iutnc\touiteur\classes;
 
-/** classe pour l'utilisateur */
+/**
+ * Classe représentant un utilisateur
+ */
 class Utilisateur
 {
-    private string $pseudo;
-    private array $touites;
+    // Attributs
+    private Profil $profil; // profil de l'utilisateur
+    private string $pseudo; // pseudo de l'utilisateur
+    private array $touitesPublies = []; // touites publiés par l'utilisateur
+    private array $touitesSuivis = []; // touites des utilisateurs suivis
+    private array $tags = []; // touites par tag donné
 
     /**
-     * Constructeur qui construit un utilisateur
+     * Constructeur d'un utilisateur
+     * @param profil de l'utilisateur
+     * @param pseudo de l'utilisateur
      */
-    public function __construct($pseudo, array $touites = [])
+    public function __construct(Profil $profil, string $pseudo)
     {
+        $this->profil = $profil;
         $this->pseudo = $pseudo;
-        $this->touites = $touites;
-
     }
-
-    public function getPseudo(): string
-    {
-        return $this->pseudo;
-    }
-
 }
