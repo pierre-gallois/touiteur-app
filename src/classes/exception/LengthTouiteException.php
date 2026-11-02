@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\touite\exception;
+namespace iutnc\touiteur\exception;
 use \Exception;
 use \Throwable;
 
