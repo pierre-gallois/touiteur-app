@@ -5,4 +5,5 @@
 # PHP / Composer
 /vendor/
 
+# PDF
 .pdf
