@@ -11,9 +11,9 @@ class Touite
 {
     // Attributs
     private string $message;      // Le contenu du touite 
-    private array $tags;          // Les #tags
+    private string $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
-    private string $date; // La date du touite
+    private Tags $tags; // Le(s) tag(s) du touite
 
     /**
      * Constructeur qui construit un touite
