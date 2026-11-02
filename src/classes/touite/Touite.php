@@ -1,8 +1,9 @@
 <?php
 
-namespace iutnc\touite;
+namespace iutnc\touiteur\touite;
 
-use iutnc\touite\exception\LengthTouiteException;
+use iutnc\touiteur\exception\LengthTouiteException;
+use iutnc\touiteur\utilisateur\Utilisateur;
 
 /**
  * Classe représentant un touite

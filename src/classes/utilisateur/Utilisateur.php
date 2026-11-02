@@ -1,8 +1,8 @@
 <?php
 
-namespace iutnc\touite\touite;
+namespace iutnc\touiteur\utilisateur;
 /** classe pour l'utilisateur */
-class utilisateur
+class Utilisateur
 {
     private string $pseudo;
     private array $touites;
