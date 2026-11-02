@@ -6,7 +6,7 @@ namespace iutnc\touiteur\classes;
 class Utilisateur
 {
     private string $pseudo; // le nom d'utilisateur
-    private array $touites; //  le poste de l'utilisateur
+    private array $touites; //  les poste de l'utilisateur
 
     /**
      * Constructeur qui construit un utilisateur
