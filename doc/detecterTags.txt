@@ -1,0 +1,2 @@
+
+Pour détecter les #tags : j'ai fait ce regex : "#[\d\w]+"
