@@ -1,10 +1,9 @@
 <?php
 
-namespace iutnc\touiteur\touite;
+namespace iutnc\touiteur\classes;
 
 use iutnc\touiteur\exception\LengthTouiteException;
-use iutnc\touiteur\utilisateur\Utilisateur;
-
+use iutnc\touiteur\classes\Utilisateur;
 /**
  * Classe représentant un touite
  */

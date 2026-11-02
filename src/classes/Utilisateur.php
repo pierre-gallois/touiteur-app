@@ -1,6 +1,7 @@
 <?php
 
-namespace iutnc\touiteur\utilisateur;
+namespace iutnc\touiteur\classes;
+
 /** classe pour l'utilisateur */
 class Utilisateur
 {
