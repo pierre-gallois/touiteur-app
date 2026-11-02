@@ -1,10 +1,11 @@
-# touiteur-app
+#### S3B | SAE : Développer une application web sécurisée
 
-Projet touiteur
+# Touiteur-app
 
-Equipe :
-GALLOIS Pierre 
-SAEZ Aidan
-SCHORSCH-LEGRAND Maxime
-Bernard Aaron
-Galkine Antonin
+
+### Membres de l'équipe 
+ - [**GALLOIS** Pierre](https://github.com/pierre-gallois) 
+ - [**SAEZ** Aidan](https://github.com/Saez-Aidan)
+ - [**SCHORSCH-LEGRAND** Maxime](https://github.com/Maxime-SCHORSCH-LEGRAND)
+ - [**Bernard** Aaron](https://github.com/Aaron04B)
+ - [**GALKINE** Antonin](https://github.com/Gvlky)
