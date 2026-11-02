@@ -21,7 +21,7 @@ class Touite
     public function __construct(string $message, array $tags)
     {
         // On vérifie que le message ne dépasse pas les 235 caractères
-        if (strlen($message) > 235) {
+        if (mb_strlen($message, 'UTF-8') > 235) {
             throw new lengthTouiteException("Le message doit contenir au maximum 235 caractères");
         } else {
             $this->message = $message;
