@@ -1,6 +1,54 @@
 @startuml
 
-title "Diagramme de classes - R&D"
+title "Diagramme de classes - R & D"
+
+
+class Touite {
+    - message : string
+    - date : string
+}
+
+class Utilisateur {
+    - pseudo : string
+
+'    Publication de touites
+    + publier(Touite)
+    + supprimer(Touite)
+    + modifier(Touite, Touite)
+    + relayer(Touite)
+
+'    Evaluation de touite (like / dislike) :
+    + aprouver(Touite)
+    + rejeter(Touite)
+}
+
+class Profil {
+    - nom : string
+    - prenom : string
+    - email : string
+    - nbTouite : int
+}
+
+class Tag {
+    - nom : string
+}
+
+Utilisateur "1" -> "*" Touite      : - touites
+Touite      " " <- "*" Tag         : - tags
+Utilisateur "*" <- " " Touite      : - auteur
+Profil "1" <- " "Utilisateur       : - profil
+
+' ↓ ↓ ↓ ↓ [R&D] ↓ ↓ ↓ ↓
+' J'ai pensé au patron Observateur/Observé
+' Mais je ne sais pas finalement
+abstract class Suivable {
+
+}
+Suivable "*" <- Suivable : - suivis
+Suivable <|-- Tag : etend
+Suivable <|-- Utilisateur: etend
+
+
 
 
 @enduml
