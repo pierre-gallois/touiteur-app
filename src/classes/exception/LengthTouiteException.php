@@ -6,7 +6,7 @@ use \Throwable;
 /**
  * Classe lengthTouiteException pour la taille d'un touite
  */
-class lengthTouiteException extends Exception
+class LengthTouiteException extends Exception
 {
     public function __construct(string $message = "", int $code = 0, Throwable|null $previous = null)
     {

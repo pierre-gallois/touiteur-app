@@ -1,8 +1,8 @@
 <?php
 
-namespace iutnc\touite\touite;
+namespace iutnc\touite;
 
-use iutnc\touite\exception\lengthTouiteException;
+use iutnc\touite\exception\LengthTouiteException;
 
 /**
  * Classe représentant un touite
@@ -10,8 +10,9 @@ use iutnc\touite\exception\lengthTouiteException;
 class Touite
 {
     // Attributs
-    private string $message;
-    private array $tags;
+    private string $message;      // Le contenu du touite 
+    private array $tags;          // Les #tags
+    private Utilisateur $autheur; // L'auteur du touite
     private string $date;
 
     /**
