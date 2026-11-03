@@ -44,6 +44,7 @@ class RendererTouite
         $touitesInverses = array_reverse($touites);
 
         $html = "";
+
         // On vient afficher chaque touite en affichage court
         foreach ($touitesInverses as $touite) {
             $html .= self::rendererCourt($touite);
