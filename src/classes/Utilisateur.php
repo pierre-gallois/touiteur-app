@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Touite</title>
+</head>
+<body>
+
+    <form method="POST" action="">
+        <textarea name="message" rows="5" cols="30"></textarea>
+
+        <input type="submit" value="Publier">
+    </form>
+
 <?php
 
 namespace iutnc\touiteur\classes;
@@ -24,4 +38,14 @@ class Utilisateur
         $this->profil = $profil;
         $this->pseudo = $pseudo;
     }
+
+    public function ajouterTouite(Touite $touite): void {
+        $this->touitesPublies[] = $touite;
+    }
+
 }
+
+?>
+
+</body>
+</html>
