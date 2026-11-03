@@ -37,8 +37,8 @@ class RendererTouite
 
     /**
      * Methode afficherListeTouite
-     * @param touites la liste des touites
-     * @return la liste des touites sous le format html
+     * @param Touite[] la liste des touites
+     * @return String la liste des touites sous le format html
      */
     public static function afficherListeTouite(array $touites): string
     {
@@ -92,4 +92,34 @@ class RendererTouite
     }
 
 
+    /**
+     * Affiche uniquement les touites associés à un tag donné
+     * @param Touite[] $touites la liste complète des touites
+     * @param string $libelleRecherche le nom du tag recherché (avec ou sans #)
+     * @return string le code HTML de la liste filtrée des touites
+     */
+    public static function afficherTouitesParTag(array $touites, string $libelleRecherche): string
+    {
+        $resultat = [];
+        // On retire les espaces et un # si l'utilisateur l'a saisi seul (possible qu'il soit pas pris en compte a se moment la en tag)
+        $libelleRecherche = ltrim(trim($libelleRecherche), '#');
+
+        $contientTag = false;
+
+        // On vérifie si le touite contient le tag recherché en parcourant le touites, en utilisant le principe fait dans la methode 8
+
+        foreach ($touite->tags as $tag) {
+                if ($tag->libelleTag === $libelleRecherche) {
+                    $contientTag = true;
+                }
+            }
+
+            // Si on l'a trouvé, on l'ajoute au tableau résultat
+            if ($contientTag) {
+                $resultat[] = $touite;  // a verifier !
+            }
+        }
+
+        return self::afficherListeTouite($resultat); // marche pas ?
+    }
 }
