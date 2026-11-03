@@ -8,7 +8,7 @@ use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\render\RendererTouite;
 
 /**
- * Classe testTouiteRenderer pour réaliser les différents tests de RendererTouite
+ * Fichier TestTouiteRenderer pour réaliser les différents tests de RendererTouite
  */
 
 // On prépare les utilisateurs
