@@ -34,6 +34,7 @@ class RendererTouite
         return $html;
     }
 
+
     /**
      * Methode afficherListeTouite
      * @param touites la liste des touites
@@ -56,26 +57,31 @@ class RendererTouite
         return $html;
     }
 
+
     /**
      *méthode  pour afficher le touite en detail
      *param  touite récupere le touite pour l'afficher
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
     public function  aff_touite_detail(Touite $touite){
+        //filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
+        //filtre le message du touite
         $message = filter_var(
             $touite->message,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-
+        // filtre la date du touite
         $date = filter_var(
             $touite->date,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-        $html = "<article class='touite-detail'>";
+
+        //affichage du touite
+        $html = "<article>";
         $html .= "<h2>" . $pseudo . "</h2>";
         $html .= "<p>" . $message . "</p>";
         $html .= "<div>" . $date . "</div>";
