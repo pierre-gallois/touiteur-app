@@ -11,7 +11,7 @@ use \iutnc\touiteur\classes\Profil;
 use \iutnc\touiteur\classes\Touite;
 
 // Vérification que si un touite fait plus de 235 caractères l'exception est levée
-echo "<h1>Test LengTouiteException </h1>";
+echo "<h1>Test LengthTouiteException </h1>";
 try {
     $u = new Utilisateur(new Profil("Dupont", "Gérard", "dupont.gerard@gmail.com"), "SuperGérard");
     // Message de 400 caractères dépassant la limite de 235
