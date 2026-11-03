@@ -12,8 +12,8 @@ use iutnc\touiteur\exception\InvalidPropertyException;
 class Touite
 {
     // Attributs
-    private string $message;      // Le contenu du touite 
-    private string $date;          // La date du touite
+    private String $message;      // Le contenu du touite
+    private String $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
     private array $tags = []; // // Liste vide avec par défaut 0 tag
 
@@ -23,12 +23,12 @@ class Touite
      * @param auteur du touite
      * @param date du touite
      */
-    public function __construct(string $message, Utilisateur $auteur, string $date)
+    public function __construct(String $message, Utilisateur $auteur, String $date)
     {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
         if (mb_strlen($message, 'UTF-8') > 235) {
-            throw new LengthTouiteException("Le message doit contenir au maximum 235 caractères"); // correction du nom exact de l'exception (L majuscule et nn minuscule)
+            throw new LengthTouiteException("Le message doit contenir au maximum 235 caractères");
         } else {
             $this->message = $message;
         }
@@ -57,8 +57,13 @@ class Touite
     {
         //sélectionne tout les tags du message
         preg_match_all('/#([\p{L}\p{N}_]+)/u', $message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
+        // détaille : \p{L} = n'importe quelle lettre (même avec accent), \p{N} = n'importe quel chiffre, et u = mode UTF-8
+
+        // On supprime les doublons possible
+        $libellesUniques = array_unique($trouver[1]);
+
         // on met tous les tags trouvé un par 1 dans le libelle
-        foreach ($trouver[1] as $libelle) {
+        foreach ($libellesUniques as $libelle) {
             if (Tag::estLibelleValide($libelle)) {
                 $this->tags[] = new Tag(0, $libelle, "");
             }
