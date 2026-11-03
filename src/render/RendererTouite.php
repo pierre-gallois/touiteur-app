@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\render;
 
 use iutnc\touiteur\classes\Touite;
+use iutnc\touiteur\classes\Utilisateur;
 
 /**
  * Classe RendererTouite qui permet d'afficher un touite sous différente forme
@@ -63,7 +64,7 @@ class RendererTouite
      *param  touite récupere le touite pour l'afficher
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
-    public function  aff_touite_detail(Touite $touite){
+    public function  aff_touite_detail(Touite $touite): string{
         //filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
@@ -90,6 +91,16 @@ class RendererTouite
         return $html;
 
     }
+    /**
+     *méthode  pour afficher les touite d'un utilisateur donné
+     *param  utilisateur pour récuperer ses touites
+     */
+    public function aff_touite_utilisateur(Utilisateur $utilisateur): string{
+        // Récupérer uniquement les touites publiés par cet utilisateur
+        $touitesutilisateur = $utilisateur->touitesPublies;
 
+        // Afficher les touites
+        return self::afficherListeTouite($touitesutilisateur);
+    }
 
 }
