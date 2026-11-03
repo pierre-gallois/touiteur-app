@@ -100,26 +100,28 @@ class RendererTouite
      */
     public static function afficherTouitesParTag(array $touites, string $libelleRecherche): string
     {
-        $resultat = [];
+        $$listeDesTouitesParTag = [];
         // On retire les espaces et un # si l'utilisateur l'a saisi seul (possible qu'il soit pas pris en compte a se moment la en tag)
         $libelleRecherche = ltrim(trim($libelleRecherche), '#');
 
-        $contientTag = false;
 
-        // On vérifie si le touite contient le tag recherché en parcourant le touites, en utilisant le principe fait dans la methode 8
+        // on parcours tous les touites de la liste
+        foreach ($touites as $touite) {
+            $contientTag = false; // On remet à false pour chaque nouveau touite
 
-        foreach ($touite->tags as $tag) {
-                if ($tag->libelleTag === $libelleRecherche) {
-                    $contientTag = true;
+            // On vérifie si le touite contient le tag recherché (en parcourant le touites), avec le principe fait dans la methode 8
+            foreach ($touite->tags as $tag) {
+                    if ($tag->libelleTag === $libelleRecherche) {
+                        $contientTag = true;
+                    }
                 }
-            }
 
-            // Si on l'a trouvé, on l'ajoute au tableau résultat
-            if ($contientTag) {
-                $resultat[] = $touite;  // a verifier !
-            }
+                // Si on l'a trouvé, on l'ajoute au tableau résultat
+                if ($contientTag) {
+                    $$listeDesTouitesParTag[] = $touite;
+                }
         }
-
-        return self::afficherListeTouite($resultat); // marche pas ?
+        // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
+        return self::afficherListeTouite($$listeDesTouitesParTag);
     }
 }
