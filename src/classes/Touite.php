@@ -4,6 +4,8 @@ namespace iutnc\touiteur\classes;
 
 use iutnc\touiteur\exception\LengthTouiteException;
 use iutnc\touiteur\classes\Utilisateur;
+use iutnc\touiteur\exception\InvalidPropertyException;
+
 /**
  * Classe représentant un touite
  */
@@ -31,5 +33,18 @@ class Touite
         }
         $this->auteur = $auteur;
         $this->date = $date;
+    }
+
+    /**
+     * Methode __get (getter magique)
+     * @return l'attribut passé en paramètre
+     */
+    public function __get($name): mixed
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        } else {
+            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Touite.");
+        }
     }
 }

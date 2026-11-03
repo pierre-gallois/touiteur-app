@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\classes;
 
 use iutnc\touiteur\exception\InvalidTagException;
+use iutnc\touiteur\exception\InvalidPropertyException;
 
 /**
  * Classe représentant un tag
@@ -31,9 +32,9 @@ class Tag
             throw new InvalidTagException("Libellé de tag invalide : " . $libelleTag);
         }
 
-        $this -> idTag = $idTag;
-        $this -> libelleTag = $libelleTag;
-        $this -> descriptionTag = $descriptionTag;
+        $this->idTag = $idTag;
+        $this->libelleTag = $libelleTag;
+        $this->descriptionTag = $descriptionTag;
     }
 
 
@@ -48,26 +49,15 @@ class Tag
     }
 
     /**
-     * Retourne l'identifiant du tag
+     * Methode __get (getter magique)
+     * @return l'attribut passé en paramètre
      */
-    public function getIdTag(): int
+    public function __get($name): mixed
     {
-        return $this -> idTag;
-    }
-
-    /**
-     * Retourne le libellé du tag
-     */
-    public function getLibelleTag(): string
-    {
-        return $this -> libelleTag;
-    }
-
-    /**
-     * Retourne la description du tag
-     */
-    public function getDescriptionTag(): string
-    {
-        return $this -> descriptionTag;
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        } else {
+            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Tag.");
+        }
     }
 }
