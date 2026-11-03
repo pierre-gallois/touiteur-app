@@ -37,8 +37,8 @@ class RendererTouite
 
     /**
      * Methode afficherListeTouite
-     * @param Touite[] la liste des touites
-     * @return String la liste des touites sous le format html
+     * @param touites la liste des touites
+     * @return la liste des touites sous le format html
      */
     public static function afficherListeTouite(array $touites): string
     {
