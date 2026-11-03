@@ -57,10 +57,7 @@ class Tag
         if (property_exists($this, $name)) {
             return $this->$name;
         } else {
-            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Tag.");
+            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Tag");
         }
     }
-
-
-
 }
