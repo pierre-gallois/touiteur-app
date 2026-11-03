@@ -53,6 +53,12 @@ class Touite
         }
     }
 
+    /**
+     * 
+     * 
+     * 
+     * 
+     */
     public function extraireTags(String $message) : void
     {
         //sélectionne tout les tags du message
@@ -69,4 +75,5 @@ class Touite
             }
         }
     }
+
 }
