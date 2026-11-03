@@ -4,6 +4,7 @@
 
 # PHP / Composer
 /vendor/
+composer.phar
 
 # PDF
 .pdf

@@ -1,0 +1,9 @@
+{
+  "name": "iutnc/touiteur",
+  "description": "Application Touiteur de la SAE : Développer une appli web sécurisée",
+  "autoload": {
+    "psr-4": {
+      "iutnc\\touiteur\\": "src/"
+    }
+  }
+}
