@@ -39,3 +39,14 @@ class Utilisateur
         }
     }
 }
+
+    public function ajouterTouite(Touite $touite): void {
+        $this->touitesPublies[] = $touite;
+    }
+
+}
+
+?>
+
+</body>
+</html>
