@@ -24,6 +24,7 @@ class RendererTouite
         $date = filter_var($touite->date, FILTER_SANITIZE_SPECIAL_CHARS);
         $texteCourt = filter_var($texteCourt, FILTER_SANITIZE_SPECIAL_CHARS);
 
+        // On construit le html
         $html = "<article>";
         $html .= "<p>$pseudo</p>";
         $html .= "<p>$texteCourt</p>";
@@ -43,13 +44,15 @@ class RendererTouite
         // Pour afficher les touites dans l'ordre chronologique inverse il suffit de parcourir la liste mais à l'envers
         $touitesInverses = array_reverse($touites);
 
-        $html = "";
+        // Pour la structure html
+        $html = "<div>";
 
         // On vient afficher chaque touite en affichage court
         foreach ($touitesInverses as $touite) {
             $html .= self::rendererCourt($touite);
         }
 
+        $html .= "</div>";
         return $html;
     }
 }
