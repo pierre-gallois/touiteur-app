@@ -14,7 +14,22 @@ class RendererTouite{
             $touite->auteur->pseudo,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
+        $message = filter_var(
+            $touite->message,
+            FILTER_SANITIZE_SPECIAL_CHARS
+        );
 
+        $date = filter_var(
+            $touite->date,
+            FILTER_SANITIZE_SPECIAL_CHARS
+        );
+        $html = "<article class='touite-detail'>";
+        $html .= "<h2>" . $pseudo . "</h2>";
+        $html .= "<p>" . $message . "</p>";
+        $html .= "<div>" . $date . "</div>";
+        $html .= "</article>";
+
+        return $html;
 
     }
 
