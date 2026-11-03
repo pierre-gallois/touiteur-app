@@ -63,7 +63,7 @@ class RendererTouite
      *param  touite récupere le touite pour l'afficher
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
-    public function  aff_touite_detail(Touite $touite){
+    public static function  aff_touite_detail(Touite $touite){
         //filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
