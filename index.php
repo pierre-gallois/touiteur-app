@@ -70,7 +70,7 @@ if (isset($_POST['message'])) {
     <?php
     foreach ($utilisateur->touitesPublies as $touite) {
         echo "<p>";
-        echo htmlspecialchars($touite->getMessage());
+        echo htmlspecialchars($touite->message);
         echo "</p>";
     }
     ?>
