@@ -15,6 +15,6 @@ $moi    = new Utilisateur($profil, "Gvlky");
 
 $moi->suivreUtilisateur($eloune);
 
-
+echo "Pseudo de la personne suivie : " . $moi->utilisateursSuivis[0]->pseudo;
 
 
