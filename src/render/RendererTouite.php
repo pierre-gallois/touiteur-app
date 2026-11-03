@@ -111,7 +111,7 @@ class RendererTouite
      */
     public static function afficherTouitesParTag(array $touites, string $libelleRecherche): string
     {
-        $$listeDesTouitesParTag = [];
+        $listeDesTouitesParTag = [];
         // On retire les espaces et un # si l'utilisateur l'a saisi seul (possible qu'il soit pas pris en compte a se moment la en tag)
         $libelleRecherche = ltrim(trim($libelleRecherche), '#');
 
@@ -129,10 +129,10 @@ class RendererTouite
 
                 // Si on l'a trouvé, on l'ajoute au tableau résultat
                 if ($contientTag) {
-                    $$listeDesTouitesParTag[] = $touite;
+                    $listeDesTouitesParTag[] = $touite;
                 }
         }
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
-        return self::afficherListeTouite($$listeDesTouitesParTag);
+        return self::afficherListeTouite($listeDesTouitesParTag);
     }
 }
