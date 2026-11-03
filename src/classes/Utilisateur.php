@@ -38,12 +38,10 @@ class Utilisateur
             throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Utilisateur.");
         }
     }
-}
 
     public function ajouterTouite(Touite $touite): void {
-        $this->touitesPublies[] = $touite;
+            $this->touitesPublies[] = $touite;
     }
-
 }
 
 ?>
