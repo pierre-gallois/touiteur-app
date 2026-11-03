@@ -6,6 +6,10 @@ use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\exception\LengthTouiteException;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Création d'un utilisateur de test
 $utilisateur = new Utilisateur($profil, "Aidan");
 
