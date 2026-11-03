@@ -97,10 +97,10 @@ class RendererTouite
      */
     public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
         // Récupérer uniquement les touites publiés par cet utilisateur
-        $touitesutilisateur = $utilisateur->touitesPublies;
+        $touitesUtilisateur = $utilisateur->touitesPublies;
 
         // Afficher les touites
-        return self::afficherListeTouite($touitesutilisateur);
+        return self::afficherListeTouite($touitesUtilisateur);
     }
 
     /**
