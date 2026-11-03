@@ -1,6 +1,7 @@
 <?php
 
 namespace iutnc\touiteur\classes;
+use iutnc\touiteur\exception\InvalidPropertyException;
 
 /**
  * Classe représentant un utilisateur
@@ -23,5 +24,18 @@ class Utilisateur
     {
         $this->profil = $profil;
         $this->pseudo = $pseudo;
+    }
+
+    /**
+     * Methode __get (getter magique)
+     * @return l'attribut passé en paramètre
+     */
+    public function __get($name): mixed
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        } else {
+            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Utilisateur.");
+        }
     }
 }

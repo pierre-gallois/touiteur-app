@@ -1,5 +1,7 @@
 <?php
+
 namespace iutnc\touiteur\exception;
+
 use \Exception;
 use \Throwable;
 
@@ -8,6 +10,9 @@ use \Throwable;
  */
 class LengthTouiteException extends Exception
 {
+    /**
+     * Constructeur qui construit une LengthTouiteException
+     */
     public function __construct(string $message = "", int $code = 0, Throwable|null $previous = null)
     {
         parent::__construct($message, $code, $previous);

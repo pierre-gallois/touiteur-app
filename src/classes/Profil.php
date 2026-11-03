@@ -2,6 +2,8 @@
 
 namespace iutnc\touiteur\classes;
 
+use iutnc\touiteur\exception\InvalidPropertyException;
+
 /**
  * Classe profil représentant le profil d'un utilisateur de Touiteur
  */
@@ -24,5 +26,18 @@ class Profil
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
+    }
+
+    /**
+     * Methode __get (getter magique)
+     * @return l'attribut passé en paramètre
+     */
+    public function __get($name): mixed
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        } else {
+            throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Profil.");
+        }
     }
 }
