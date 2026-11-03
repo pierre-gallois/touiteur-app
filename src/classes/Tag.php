@@ -43,7 +43,7 @@ class Tag
      * @param libelle le libellé à vérifier
      * @return bool true si le libellé est valide, false sinon
      */
-    private static function estLibelleValide(string $libelle): bool
+    public static function estLibelleValide(string $libelle): bool
     {
         return preg_match('/^[\p{L}\p{N}_]+$/u', $libelle) === 1;
     }
@@ -60,4 +60,7 @@ class Tag
             throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Tag.");
         }
     }
+
+
+
 }
