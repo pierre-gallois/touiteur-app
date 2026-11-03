@@ -13,7 +13,7 @@ class Touite
     private string $message;      // Le contenu du touite 
     private string $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
-    private Tags $tags; // Le(s) tag(s) du touite
+    private Tag $tags; // Le(s) tag(s) du touite
 
     /**
      * Constructeur qui construit un touite
