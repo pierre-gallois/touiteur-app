@@ -48,5 +48,3 @@ class Utilisateur
 
 ?>
 
-</body>
-</html>
