@@ -12,6 +12,9 @@ abstract class Action
     protected ?string $hostname = null;
     protected ?string $script_name = null;
 
+    /**
+     * Constructeur Action
+     */
     public function __construct()
     {
         $this->http_method = $_SERVER['REQUEST_METHOD'];
