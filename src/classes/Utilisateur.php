@@ -44,6 +44,7 @@ class Utilisateur
     {
         $this->touitesPublies[] = $touite;
     }
+
 }
 
 ?>
