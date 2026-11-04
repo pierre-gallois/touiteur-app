@@ -14,6 +14,8 @@ class Tag
     private int $idTag; // identifiant du tag
     private string $libelleTag; // libellé du tag, sans le caractère #
     private string $descriptionTag; // description du tag
+    // Générateur de tag
+    private static int $increment = 0;
 
     /**
      * Constructeur qui construit un tag
@@ -22,7 +24,7 @@ class Tag
      * @param descriptionTag description du tag
      * @throws InvalidTagException si le libellé est invalide
      */
-    public function __construct(int $idTag, string $libelleTag, string $descriptionTag)
+    public function __construct(string $libelleTag, string $descriptionTag)
     {
         // On retire les espaces et le # éventuel au début
         $libelleTag = ltrim(trim($libelleTag), '#');
@@ -32,7 +34,7 @@ class Tag
             throw new InvalidTagException("Libellé de tag invalide : " . $libelleTag);
         }
 
-        $this->idTag = $idTag;
+        $this->idTag = self::$increment++;
         $this->libelleTag = $libelleTag;
         $this->descriptionTag = $descriptionTag;
     }

@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
 
-class AfficherTouiteDetailAction implements Action
+class AfficherTouiteDetailAction extends Action
 {
     // Tableau contenant tous les touites disponibles
     private array $listeTouites;
@@ -24,7 +24,6 @@ class AfficherTouiteDetailAction implements Action
         // Vérifie que l'identifiant existe
         if (
             $id === null ||
-            $id === false ||
             !array_key_exists($id, $this->listeTouites)
         ) {
             // Retourne un message si le touite est introuvable

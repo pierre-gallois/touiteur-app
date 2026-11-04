@@ -67,23 +67,23 @@ class RendererTouite
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
     public static function  aff_touite_detail(Touite $touite): string{
-        //filtre le pseudo de l'auteur
+        //Filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-        //filtre le message du touite
+        //Filtre le message du touite
         $message = filter_var(
             $touite->message,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-        // filtre la date du touite
+        // Filtre la date du touite
         $date = filter_var(
             $touite->date,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
 
-        //affichage du touite
+        //Affichage du touite
         $html = "<article>";
         $html .= "<h2>" . $pseudo . "</h2>";
         $html .= "<p>" . $message . "</p>";
@@ -142,11 +142,19 @@ class RendererTouite
     }
 
 
+    /**
+     * Affiche le mur qui sont les touites suivie par l'utilisateur et/ou sont des tags suivis par l'utilisateur (= abonnée au tag)
+     * @param Utilisateur $user l'utilisateur dont on veut afficher le mur
+     * @param Touite[] $touites la liste complète des touites
+     * @return string le code HTML du mur
+     */
     public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
     {
         $ListeTouitesMur = [];
 
         foreach ($tousLesTouites as $touite){
+
+            // par défaut on affiche pas les tout les touites
             $AchicherSurLeMur = false;
 
             // si le touite fait partie des auteurs suivis par l'utilisateur
@@ -157,14 +165,15 @@ class RendererTouite
             // on recherche parmis les tag(s) du touite
             foreach($touite->tagsSuivis as $tagDuTouite){
 
-                // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
+                // pour chaque tag(s) suivis par l'utilisateur
                 foreach ($user->tagsSuivis as $tagAbonne) {
+                    // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
                     if ($tagDuTouite->libelleTag === $tagAbonne->libelleTag) {
                         $AfficherSurLeMur = true;
                     }
                 }
             }
-            // met le touite qui est Soit suivie par l'utilisateur, Soit il fait partie des tags suivis (est abonnée au tag)
+            // met le touite dans les touite à afficher, si il est suivie par l'utilisateur et/ou dans les tags suivis (= abonnée au tag)
             if ($AfficherSurLeMur){
                 $ListeTouitesMur[] = $touite;
             }
