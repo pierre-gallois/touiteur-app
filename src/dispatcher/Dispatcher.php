@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\dispatcher;
 
 use iutnc\touiteur\action\AfficherListeTouiteAction;
+use iutnc\touiteur\action\DefaultAction;
 
 /**
  * Class Dispatcher
@@ -31,7 +32,8 @@ class Dispatcher
         // Appel de l'action demandée
         switch ($this->action) {
             case "default":
-                // TODO faire defaultAction
+                $obj = new DefaultAction();
+                $resultat = $obj->execute();
                 break;
             case "afficherListeTouite":
                 $obj = new AfficherListeTouiteAction();
