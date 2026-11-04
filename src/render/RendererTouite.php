@@ -27,13 +27,12 @@ class RendererTouite
         $texteCourt = filter_var($texteCourt, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // On construit le html
-        $html = "<a href='index.php?action=detail&id=$id'>";
-        $html .= "<article>";
+        $html = "<article>";
         $html .= "<p>$pseudo</p>";
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
         $html .= "</article>";
-        $html .= "</a>";
+        $html .= "<a href='index.php?action=detail&id=$id'>Voir tout le touite</a>";
 
         return $html;
     }

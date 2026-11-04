@@ -15,7 +15,7 @@ abstract class Repository {
 
 
     // Protégé : redéfini dans les enfants
-    protected abstract function __construct();
+    private function __construct(){}
 
     /**
      * Méthode singleton : retourne une seule et unique instance.
