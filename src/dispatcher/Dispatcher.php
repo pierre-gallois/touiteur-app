@@ -12,19 +12,16 @@ class Dispatcher {
 
     protected array $actions = [];
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->action = $_GET['action'] ?? 'default';
     }
 
-    public function addRoute(string $action, string $action_class): self
-    {
+    public function addRoute(string $action, string $action_class): self {
         $this->actions[$action] = $action_class;
         return $this;
     }
 
-    public function run(): string
-    {
+    public function run(): string {
         if (isset($this->actions[$this->action])) {
             $action_class = $this->actions[$this->action];
             return (new $action_class())->execute();
