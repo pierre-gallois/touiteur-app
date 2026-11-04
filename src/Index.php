@@ -10,7 +10,17 @@ use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\DefaultAction;
+use iutnc\touiteur\repository\RepoDev;
 
+// Bases de données (en dur)
+$repo = RepoDev::getInstance();
+try {
+    $repo->stocker(new \iutnc\touiteur\classes\Touite("Test", new \iutnc\touiteur\classes\Utilisateur(new \iutnc\touiteur\classes\Profil("Yo", "Le RAP", "YO.LERAP@gmail.com"), "TaSoeur"), "0.0.0.0"));
+} catch (\iutnc\touiteur\exception\LengthTouiteException $e) {
+    echo $e->getMessage();
+}
+
+// Création Dispatcher
 $dispatcher = (new Dispatcher())
     ->addRoute('Abonner Tag', ActionAbonnerTag::class)
     ->addRoute('Publier Touite', ActionPublierTouite::class)
@@ -20,6 +30,7 @@ $dispatcher = (new Dispatcher())
     ->addRoute('Afficher Influenceur', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
 
+// Exécution action
 try {
     echo $dispatcher->run();
 } catch (DispatcherException $e) {
