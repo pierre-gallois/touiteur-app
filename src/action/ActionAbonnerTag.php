@@ -5,7 +5,7 @@ namespace iutnc\touiteur\classes\actions;
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Tag;
 
-class AbonnerTag {
+class ActionAbonnerTag {
 
     public function execute(Utilisateur $utilisateur, Tag $tag): void {
 
