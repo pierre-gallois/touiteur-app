@@ -42,9 +42,11 @@ class Touite
 
     /**
      * Methode __get (getter magique)
+     * @param name de l'attribut
      * @return l'attribut passé en paramètre
+     * @throw InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get($name): mixed
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -54,10 +56,8 @@ class Touite
     }
 
     /**
-     * 
-     * 
-     * 
-     * 
+     * Methode extraiteTags qui extrait les tags du message
+     * @param message dans lequel on veut extraire les tags
      */
     public function extraireTags(String $message) : void
     {

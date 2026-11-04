@@ -30,9 +30,11 @@ class Utilisateur
 
     /**
      * Methode __get (getter magique)
+     * @param name de l'attribut
      * @return l'attribut passé en paramètre
+     * @throw InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get($name): mixed
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
