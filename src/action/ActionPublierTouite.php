@@ -8,7 +8,7 @@ use iutnc\touiteur\exception\LengthTouiteException;
 
 class ActionPublierTouite {
 
-    public function execute(Utilisateur $utilisateur, string $message): void {
+    public function execute(Utilisateur $utilisateur, string $message) : void {
 
         // Création du touite
         $touite = new Touite(

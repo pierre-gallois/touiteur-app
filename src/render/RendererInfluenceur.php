@@ -7,14 +7,13 @@ use iutnc\touiteur\classes\Utilisateur;
 /**
  * Classe RendererInfluenceur permettant d'afficher les influenceurs
  */
-class RendererInfluenceur
-{
+class RendererInfluenceur {
     /**
      * Méthode rendererInfluenceur qui affiche la liste des influenceurs
      * @param array $utilisateurs liste des utilisateurs
      * @return string la liste des influenceurs au format html
      */
-    public static function rendererInfluenceur(array $utilisateurs): string
+    public static function rendererInfluenceur(array $utilisateurs) : string
     {
         // On utilise usor pour que la méthode trie les utilisateurs selon leur nombre d'abonnés
         // Ou en cas d'égalité par leur pseudo
