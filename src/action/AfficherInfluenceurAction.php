@@ -3,7 +3,6 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererInfluenceur;
-use iutnc\touiteur\render\RendererTouite;
 use iutnc\touiteur\repository\RepoDev;
 
 /**
