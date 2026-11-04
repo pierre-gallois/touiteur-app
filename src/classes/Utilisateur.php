@@ -74,6 +74,7 @@ class Utilisateur
         }
     }
 
+
     /**
      *Methode pour suivre un tag
      * @param Tag $tag
