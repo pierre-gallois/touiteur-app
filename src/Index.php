@@ -6,7 +6,7 @@ use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\classes\actions\ActionAbonnerTag;
 use iutnc\touiteur\classes\actions\ActionPublierTouite;
 use iutnc\touiteur\dispatcher\Dispatcher;
-use iutnc\touiteur\exception\DispatchException;
+use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 
@@ -20,7 +20,7 @@ $dispatcher = (new Dispatcher())
 
 try {
     echo $dispatcher->run();
-} catch (DispatchException $e) {
+} catch (DispatcherException $e) {
     echo "Erreur d'affichage";
 }
 
