@@ -3,7 +3,6 @@
 namespace iutnc\touiteur\dispatcher;
 
 use iutnc\touiteur\exception\DispatcherException;
-use iutnc\touiteur\exception\DispatcherException;
 
 /**
  * Class Dispatcher
