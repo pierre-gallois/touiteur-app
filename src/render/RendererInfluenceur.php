@@ -47,7 +47,7 @@ class RendererInfluenceur
             $html .= "<li> $pseudo, nombre d'abonnés : $nbAbonnes </li>";
         }
 
-        $html .= "</ul>";
+        $html .= "</ul></Div>";
         return $html;
     }
 }
