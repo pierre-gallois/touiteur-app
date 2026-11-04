@@ -4,19 +4,17 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
 
-class AfficherTouiteDetailAction extends Action
-{
+class AfficherTouiteDetailAction extends Action {
     // Tableau contenant tous les touites disponibles
     private array $listeTouites;
 
     // Constructeur : récupère la liste des touites
-    public function __construct(array $listeTouites)
-    {
+    public function __construct(array $listeTouites) {
         $this->listeTouites = $listeTouites;
     }
 
     // Exécute l'action permettant d'afficher un touite en détail
-    public function execute(): string
+    public function execute() : string
     {
         // Récupère l'identifiant du touite dans l'URL
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);

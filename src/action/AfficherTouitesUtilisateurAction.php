@@ -4,19 +4,17 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
 
-class AfficherTouitesUtilisateurAction extends Action
-{
+class AfficherTouitesUtilisateurAction extends Action {
     // Tableau contenant les utilisateurs de l'application
     private array $listeUtilisateurs;
 
     // Constructeur : récupère la liste des utilisateurs
-    public function __construct(array $listeUtilisateurs)
-    {
+    public function __construct(array $listeUtilisateurs) {
         $this->listeUtilisateurs = $listeUtilisateurs;
     }
 
     // Exécute l'action permettant d'afficher les touites d'un utilisateur
-    public function execute(): string
+    public function execute() : string
     {
         // Récupère le pseudo de l'utilisateur depuis l'URL
         $pseudo = $_GET['pseudo'] ?? '';
