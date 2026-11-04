@@ -45,14 +45,18 @@ class Tag
      */
     public static function estLibelleValide(string $libelle): bool
     {
+        // Vérifie le début avec (^) jusqu'à la fin ($) : qu'il y a au moins un (ou plus) caractère parmi : lettre (\p{L}), chiffre (\p{N}) ou _ en UTF-8 (u)
+        // preg_match retourne 1 si le libellé respecte ce format, 0 sinon
         return preg_match('/^[\p{L}\p{N}_]+$/u', $libelle) === 1;
     }
 
     /**
      * Methode __get (getter magique)
+     * @param name de l'attribut
      * @return l'attribut passé en paramètre
+     * @throw InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get($name): mixed
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
