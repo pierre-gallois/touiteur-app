@@ -55,10 +55,36 @@ class Tag {
     + __get(string) : mixed
 }
 
+
+abstract class Repository {
+    - {static} instance : self
+    # {abstract} __construct()
+    + getInstance() : self
+    + {abstract} stocker(string, mixed) : int
+    + enregistrer(mixed) : int
+    + {abstract} recuperer(string, int)
+}
+
+class RepoDev {
+    - {static} TOUITES : string
+    - {static} UTILISATEURS : string
+    - touites : array
+    - utilisateurs: array
+    - increment : int
+    # __construct()
+    # stocker(string, mixed) : int
+    + recuperer(string
+}
+class RepoBD {
+    {abstract}à coder dans la partie BD
+}
+Repository <|-- RepoDev : etend
+Repository <|-- RepoBD : etend
+
 Utilisateur "1" -> "*" Touite      : - touites
 Touite      " " <- "*" Tag         : - tags
 Utilisateur "*" <- " " Touite      : - auteur
-Profil "1" <- " "Utilisateur       : - profil
+Profil      "1" <- " " Utilisateur : - profil
 
 ' ↓ ↓ ↓ ↓ [R&D] ↓ ↓ ↓ ↓
 'abstract class Suivable {}
