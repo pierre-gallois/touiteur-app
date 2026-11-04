@@ -8,13 +8,11 @@ use iutnc\touiteur\repository\RepoDev;
 /**
  * Clase AfficherListeTouiteAction
  */
-class AfficherListeTouiteAction extends Action
-{
+class AfficherListeTouiteAction extends Action {
     /**
      * Constructeur de AfficherListeTouiteAction
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -22,7 +20,7 @@ class AfficherListeTouiteAction extends Action
      * Méthode execute qui va afficher la liste des touites
      * @return string liste des touites au format html
      */
-    public function execute(): string
+    public function execute() : string
     {
         $repo = RepoDev::getInstance();
         $touites = $repo->getTouites();

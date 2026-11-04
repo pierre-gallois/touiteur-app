@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Profil;
 use iutnc\touiteur\render\RendererInfluenceur;

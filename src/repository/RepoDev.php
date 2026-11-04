@@ -18,31 +18,35 @@ class RepoDev extends Repository {
     private array $tags;
 
 
-    protected function __construct(){
+    protected function __construct() {
         $this->touites = [];
         $this->utilisateurs = [];
         $this->tags = [];
     }
 
-    private function stockerTouite(Touite $touite)
+
+    private function stockerTouite(Touite $touite) : void
     {
         if (array_key_exists($touite->auteur->pseudo, $this->utilisateurs)) {
             $this->touites[$touite->id] = $touite;
         }
     }
 
-    private function stockerUtilisateur(Utilisateur $utilisateur)
+
+    private function stockerUtilisateur(Utilisateur $utilisateur) : void
     {
         $this->utilisateurs[$utilisateur->pseudo] = $utilisateur;
     }
 
-    private function stockerTag(Tag $tag)
+
+    private function stockerTag(Tag $tag) : void
     {
         $this->tags[$tag->libelleTag] = $tag;
     }
 
 
-    public function stocker(mixed $data) {
+    public function stocker(mixed $data) : void
+    {
         if ($data instanceof Touite){
             $nombreTouites = count($this->touites);
             $this->stockerTouite($data);
@@ -61,11 +65,13 @@ class RepoDev extends Repository {
         }
     }
 
+
     public function getTouite(mixed $id) : Touite
     {
         if (array_key_exists($id, $this->touites)) return $this->touites[$id];
         throw new InvalidArgumentException("Aucun touite avec cet id");
     }
+
 
     public function getUtilisateur(mixed $id) : Utilisateur
     {
@@ -73,26 +79,28 @@ class RepoDev extends Repository {
         throw new InvalidArgumentException("Aucun utilisateur avec cet id");
     }
 
+
     public function getTag(mixed $id) : Tag
     {
         if (array_key_exists($id, $this->tags)) return $this->tags[$id];
         throw new InvalidArgumentException("Aucun tag avec cet id");
     }
 
-    public function getTouites(): array
+
+    public function getTouites() : array
     {
         return $this->touites;
     }
 
-    public function getUtilisateurs(): array
+
+    public function getUtilisateurs() : array
     {
         return $this->utilisateurs;
     }
 
-    public function getTags(): array
+
+    public function getTags() : array
     {
         return $this->tags;
     }
-
-
 }
