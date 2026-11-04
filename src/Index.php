@@ -11,23 +11,31 @@ use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\classes\Utilisateur;
+use iutnc\touiteur\classes\Profil;
+use \iutnc\touiteur\classes\Touite;
 
 // Bases de données (en dur)
+// Sera remplacée dans un config plus tard
 $repo = RepoDev::getInstance();
 try {
-    $repo->stocker(new \iutnc\touiteur\classes\Touite("Test", new \iutnc\touiteur\classes\Utilisateur(new \iutnc\touiteur\classes\Profil("Yo", "Le RAP", "YO.LERAP@gmail.com"), "TaSoeur"), "0.0.0.0"));
+    // Création de quelques utilisateurs
+    $jean = new Utilisateur(new Profil("Jean", "Dupont", "jdupont@dupont.jean"), "JeanDu08");
+    $repo->stocker($jean);
+    $repo->stocker(new Touite("Je suis Jean", $jean, "04.11.2026 17.09.44"));
+
 } catch (\iutnc\touiteur\exception\LengthTouiteException $e) {
     echo $e->getMessage();
 }
 
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
-    ->addRoute('Abonner Tag', ActionAbonnerTag::class)
-    ->addRoute('Publier Touite', ActionPublierTouite::class)
-    ->addRoute('Afficher tout le touite', AfficherTouiteDetailAction::class)
-    ->addRoute('Afficher touite(s) utilisateur', AfficherTouitesUtilisateurAction::class)
-    ->addRoute('afficher liste touite', AfficherListeTouiteAction::class)
-    ->addRoute('Afficher Influenceur', AfficherInfluenceurAction::class)
+    ->addRoute('abonner-tag', ActionAbonnerTag::class)
+    ->addRoute('publier-touite', ActionPublierTouite::class)
+    ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
+    ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
+    ->addRoute('touites', AfficherListeTouiteAction::class)
+    ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
 
 // Exécution action
@@ -36,5 +44,3 @@ try {
 } catch (DispatcherException $e) {
     echo "404 : Not found.";
 }
-
-
