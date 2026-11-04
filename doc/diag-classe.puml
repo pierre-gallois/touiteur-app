@@ -6,20 +6,35 @@ title "Diagramme de classes - R & D"
 class Touite {
     - message : string
     - date : string
+    + extraireTags(string) : void
+
+    + __get(string) : mixed
 }
 
 class Utilisateur {
     - pseudo : string
+    - touitesPublies : array
+    - touitesSuivis : array
+    - tags : array
+    - utilisateursSuivis : array
+    - touitesAbonnes : array
 
 '    Publication de touites
-    + publier(Touite)
-    + supprimer(Touite)
-    + modifier(Touite, Touite)
-    + relayer(Touite)
+'    + publier(Touite)
+    + ajouterTouite(Touite)
+'    + supprimer(Touite)
+'    + modifier(Touite, Touite)
+'    + relayer(Touite)
 
 '    Evaluation de touite (like / dislike) :
-    + aprouver(Touite)
-    + rejeter(Touite)
+'    + aprouver(Touite)
+'    + rejeter(Touite)
+
+'   Social
+    + suivreUtilisateur(Utilisateur) : void
+'    + suivreTag(Tag)
+
+    + __get(string) : mixed
 }
 
 class Profil {
@@ -27,10 +42,17 @@ class Profil {
     - prenom : string
     - email : string
     - nbTouite : int
+
+    + __get(string) : mixed
 }
 
 class Tag {
-    - nom : string
+    - idTag : int
+    - libelleTag : string
+    - descriptionTag : string
+    + {static} estLibelleValide(string) : bool
+
+    + __get(string) : mixed
 }
 
 Utilisateur "1" -> "*" Touite      : - touites
@@ -39,16 +61,12 @@ Utilisateur "*" <- " " Touite      : - auteur
 Profil "1" <- " "Utilisateur       : - profil
 
 ' ↓ ↓ ↓ ↓ [R&D] ↓ ↓ ↓ ↓
-' J'ai pensé au patron Observateur/Observé
-' Mais je ne sais pas finalement
-abstract class Suivable {
+'abstract class Suivable {}
+'Suivable "*" <- Suivable : - suivis
+'Suivable <|-- Tag : etend
+'Suivable <|-- Utilisateur: etend
 
-}
-Suivable "*" <- Suivable : - suivis
-Suivable <|-- Tag : etend
-Suivable <|-- Utilisateur: etend
-
-
+class A
 
 
 @enduml
