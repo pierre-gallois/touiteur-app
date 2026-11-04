@@ -13,9 +13,9 @@ class RendererTouite
     /**
      * Méthode rendererCourt
      * @param touite à afficher
-     * @return touite en format court en code html
+     * @return String touite en format court en code html
      */
-    public static function rendererCourt(Touite $touite, int $id): string
+    public static function rendererCourt(Touite $touite, int $id): String
     {
         // comme c'est un affiche court, on affiche que les 100 premiers caractères du touite
         $texteCourt = mb_strimwidth($touite->message, 0, 100, "...");
@@ -41,9 +41,9 @@ class RendererTouite
     /**
      * Methode afficherListeTouite
      * @param touites la liste des touites
-     * @return la liste des touites sous le format html
+     * @return String la liste des touites sous le format html
      */
-    public static function afficherListeTouite(array $touites): string
+    public static function afficherListeTouite($touites): String
     {
         // Pour afficher les touites dans l'ordre chronologique inverse il suffit de parcourir la liste mais à l'envers
         $touitesInverses = array_reverse($touites);
@@ -62,11 +62,11 @@ class RendererTouite
 
 
     /**
-     *méthode  pour afficher le touite en detail
-     *param  touite récupere le touite pour l'afficher
-     * récupere de touite le pseudo , le message et la date en utilisant un filtre
+     * Méthode pour afficher le touite en detail
+     * @param touite récupère le touite pour l'afficher
+     * @return String de touite le pseudo, le message et la date en utilisant un filtre sous le format html
      */
-    public static function  aff_touite_detail(Touite $touite): string{
+    public static function  aff_touite_detail(Touite $touite): String{
         //Filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
@@ -91,15 +91,15 @@ class RendererTouite
         $html .= "</article>";
 
         return $html;
-
     }
 
 
     /**
-     * méthode  pour afficher les touite d'un utilisateur donné
-     * param  utilisateur pour récuperer ses touites
+     * Méthode pour afficher les touite d'un utilisateur donné
+     * @param utilisateur pour récuperer ses touites
+     * @return String le code HTML de tout les utilisateur
      */
-    public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
+    public  static function aff_touite_utilisateur(Utilisateur $utilisateur): String{
         // Récupérer uniquement les touites publiés par cet utilisateur
         $touitesutilisateur = $utilisateur->touitesPublies;
 
@@ -107,14 +107,13 @@ class RendererTouite
         return self::afficherListeTouite($touitesutilisateur);
     }
 
-
     /**
      * Affiche uniquement les touites associés à un tag donné
      * @param Touite[] $touites la liste complète des touites
-     * @param string $libelleRecherche le nom du tag recherché (avec ou sans #)
-     * @return string le code HTML de la liste filtrée des touites
+     * @param String $libelleRecherche le nom du tag recherché (avec ou sans #)
+     * @return String le code HTML de la liste filtrée des touites
      */
-    public static function afficherTouitesParTag(array $touites, string $libelleRecherche): string
+    public static function afficherTouitesParTag($touites, String $libelleRecherche): String
     {
         $listeDesTouitesParTag = [];
         // On retire les espaces et un # si l'utilisateur l'a saisi seul (possible qu'il soit pas pris en compte a se moment la en tag)
@@ -146,16 +145,16 @@ class RendererTouite
      * Affiche le mur qui sont les touites suivie par l'utilisateur et/ou sont des tags suivis par l'utilisateur (= abonnée au tag)
      * @param Utilisateur $user l'utilisateur dont on veut afficher le mur
      * @param Touite[] $touites la liste complète des touites
-     * @return string le code HTML du mur
+     * @return String le code HTML du mur
      */
-    public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
+    public static function afficherMurUtilisateur(Utilisateur $user, $tousLesTouites) : String
     {
         $ListeTouitesMur = [];
 
         foreach ($tousLesTouites as $touite){
 
             // par défaut on affiche pas les tout les touites
-            $AchicherSurLeMur = false;
+            $AfficherSurLeMur = false;
 
             // si le touite fait partie des auteurs suivis par l'utilisateur
             if (in_array($touite->auteur, $user->utilisateursSuivis)) {
@@ -163,7 +162,7 @@ class RendererTouite
             }
 
             // on recherche parmis les tag(s) du touite
-            foreach($touite->tagsSuivis as $tagDuTouite){
+            foreach($touite->tags as $tagDuTouite){
 
                 // pour chaque tag(s) suivis par l'utilisateur
                 foreach ($user->tagsSuivis as $tagAbonne) {
@@ -179,6 +178,6 @@ class RendererTouite
             }
         }
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
-        return self::afficherListeTouite($AfficherSurLeMur);
+        return self::afficherListeTouite($ListeTouitesMur);
     }
 }
