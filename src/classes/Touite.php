@@ -12,8 +12,8 @@ use iutnc\touiteur\exception\InvalidPropertyException;
 class Touite
 {
     // Attributs
-    private String $message;      // Le contenu du touite
-    private String $date;          // La date du touite
+    private string $message;      // Le contenu du touite
+    private string $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
     private array $tags = []; // Liste vide avec par défaut 0 tag
 
@@ -23,7 +23,7 @@ class Touite
      * @param auteur du touite
      * @param date du touite
      */
-    public function __construct(String $message, Utilisateur $auteur, String $date)
+    public function __construct(string $message, Utilisateur $auteur, string $date)
     {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
@@ -59,7 +59,7 @@ class Touite
      * Methode extraiteTags qui extrait les tags du message
      * @param message dans lequel on veut extraire les tags
      */
-    public function extraireTags(String $message) : void
+    public function extraireTags(string $message): void
     {
         //sélectionne tout les tags du message
         preg_match_all('/#([\p{L}\p{N}_]+)/u', $message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
@@ -75,5 +75,6 @@ class Touite
             }
         }
     }
+}
 
 
