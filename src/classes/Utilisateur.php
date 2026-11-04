@@ -15,6 +15,7 @@ class Utilisateur
     private array $touitesPublies = []; // touites publiés par l'utilisateur
     private array $touitesSuivis = []; // touites des utilisateurs suivis
     private array $tags = []; // touites par tag donné
+    private array $touitesAbonnes = []; // utilisateurs abonnés à cet utilisateur
 
     /**
      * Constructeur d'un utilisateur
@@ -40,6 +41,11 @@ class Utilisateur
         }
     }
 
+    /**
+     * Methode ajouterTouite qui ajoute un touite
+     * @param Touite $touite qu'on veut ajouter
+     * @return void
+     */
     public function ajouterTouite(Touite $touite): void
     {
         $this->touitesPublies[] = $touite;
