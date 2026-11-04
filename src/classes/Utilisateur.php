@@ -55,8 +55,6 @@ class Utilisateur
         $this->touitesPublies[] = $touite;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Methode pour suivre un utilisateur.
      * @param Utilisateur $user l'utilisateur à suivre
@@ -66,6 +64,7 @@ class Utilisateur
         $this->utilisateursSuivis[] = $user;
     }
 
+
     /**
     *Methode pour suivre un tag
     *@param Tag $tag
@@ -74,7 +73,6 @@ class Utilisateur
     public function suivreTag(Tag $tag){
         $this->tagsSuivis[]=$tag;
     }
->>>>>>> 8e49bc9f523ca131baf9d817585bf5cd469d4930
 }
 
 ?>
