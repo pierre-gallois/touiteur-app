@@ -60,20 +60,20 @@ abstract class Repository {
     - {static} instance : self
     # {abstract} __construct()
     + getInstance() : self
-    + {abstract} stocker(string, mixed) : int
-    + enregistrer(mixed) : int
-    + {abstract} recuperer(string, int)
 }
 
 class RepoDev {
-    - {static} TOUITES : string
-    - {static} UTILISATEURS : string
     - touites : array
     - utilisateurs: array
-    - increment : int
+    - tags: array
     # __construct()
-    # stocker(string, mixed) : int
-    + recuperer(string
+    + getUtilisateurs() : array
+    + getUtilisateur(string) : array
+    + getTouites() : array
+    + getTouite(int) : array
+    + getTags() : array
+    + getTag(int) : array
+
 }
 class RepoBD {
     {abstract}à coder dans la partie BD
@@ -91,8 +91,6 @@ Profil      "1" <- " " Utilisateur : - profil
 'Suivable "*" <- Suivable : - suivis
 'Suivable <|-- Tag : etend
 'Suivable <|-- Utilisateur: etend
-
-class A
 
 
 @enduml
