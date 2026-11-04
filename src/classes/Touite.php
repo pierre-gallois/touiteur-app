@@ -15,7 +15,7 @@ class Touite
     private String $message;      // Le contenu du touite
     private String $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
-    private array $tags = []; // // Liste vide avec par défaut 0 tag
+    private array $tags = []; // Liste vide avec par défaut 0 tag
 
     /**
      * Constructeur qui construit un touite
@@ -42,9 +42,11 @@ class Touite
 
     /**
      * Methode __get (getter magique)
+     * @param name de l'attribut
      * @return l'attribut passé en paramètre
+     * @throw InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get($name): mixed
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -53,6 +55,10 @@ class Touite
         }
     }
 
+    /**
+     * Methode extraiteTags qui extrait les tags du message
+     * @param message dans lequel on veut extraire les tags
+     */
     public function extraireTags(String $message) : void
     {
         //sélectionne tout les tags du message
@@ -69,4 +75,5 @@ class Touite
             }
         }
     }
-}
+
+

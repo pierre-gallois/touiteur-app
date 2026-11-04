@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\render;
 
 use iutnc\touiteur\classes\Touite;
+use iutnc\touiteur\classes\Utilisateur;
 
 /**
  * Classe RendererTouite qui permet d'afficher un touite sous différente forme
@@ -63,7 +64,7 @@ class RendererTouite
      *param  touite récupere le touite pour l'afficher
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
-    public function  aff_touite_detail(Touite $touite){
+    public static function  aff_touite_detail(Touite $touite): string{
         //filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
@@ -90,6 +91,48 @@ class RendererTouite
         return $html;
 
     }
+    /**
+     *méthode  pour afficher les touite d'un utilisateur donné
+     *param  utilisateur pour récuperer ses touites
+     */
+    public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
+        // Récupérer uniquement les touites publiés par cet utilisateur
+        $touitesUtilisateur = $utilisateur->touitesPublies;
+
+        // Afficher les touites
+        return self::afficherListeTouite($touitesUtilisateur);
+    }
+
+    /**
+     * Affiche uniquement les touites associés à un tag donné
+     * @param Touite[] $touites la liste complète des touites
+     * @param string $libelleRecherche le nom du tag recherché (avec ou sans #)
+     * @return string le code HTML de la liste filtrée des touites
+     */
+    public static function afficherTouitesParTag(array $touites, string $libelleRecherche): string
+    {
+        $listeDesTouitesParTag = [];
+        // On retire les espaces et un # si l'utilisateur l'a saisi seul (possible qu'il soit pas pris en compte a se moment la en tag)
+        $libelleRecherche = ltrim(trim($libelleRecherche), '#');
 
 
+        // on parcours tous les touites de la liste
+        foreach ($touites as $touite) {
+            $contientTag = false; // On remet à false pour chaque nouveau touite
+
+            // On vérifie si le touite contient le tag recherché (en parcourant le touites), avec le principe fait dans la methode 8
+            foreach ($touite->tags as $tag) {
+                    if ($tag->libelleTag === $libelleRecherche) {
+                        $contientTag = true;
+                    }
+                }
+
+                // Si on l'a trouvé, on l'ajoute au tableau résultat
+                if ($contientTag) {
+                    $listeDesTouitesParTag[] = $touite;
+                }
+        }
+        // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
+        return self::afficherListeTouite($listeDesTouitesParTag);
+    }
 }
