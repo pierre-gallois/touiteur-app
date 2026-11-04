@@ -9,8 +9,7 @@ use iutnc\touiteur\exception\InvalidPropertyException;
 /**
  * Classe représentant un touite
  */
-class Touite
-{
+class Touite {
     // Attributs
     private string $message;      // Le contenu du touite
     private string $date;          // La date du touite
@@ -19,14 +18,16 @@ class Touite
     private int $id;
     // Générateur d'id
     private static int $increment = 0;
+
+
     /**
      * Constructeur qui construit un touite
-     * @param message le message du touite
-     * @param auteur du touite
-     * @param date du touite
+     * @param string $message le message du touite
+     * @param Utilisateur $auteur du touite
+     * @param string $date du touite
+     * @throws LengthTouiteException si le message dépasse 235 caractères
      */
-    public function __construct(string $message, Utilisateur $auteur, string $date)
-    {
+    public function __construct(string $message, Utilisateur $auteur, string $date) {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
         if (mb_strlen($message, 'UTF-8') > 235) {
@@ -44,11 +45,11 @@ class Touite
 
     /**
      * Methode __get (getter magique)
-     * @param name de l'attribut
-     * @return l'attribut passé en paramètre
-     * @throw InvalidPropertyException est levée si l'attribut n'existe pas
+     * @param string $name de l'attribut
+     * @return mixed l'attribut passé en paramètre
+     * @throws InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get(string $name): mixed
+    public function __get(string $name) : mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -59,9 +60,9 @@ class Touite
 
     /**
      * Methode extraiteTags qui extrait les tags du message
-     * @param message dans lequel on veut extraire les tags
+     * @return void
      */
-    public function extraireTags(): void
+    private function extraireTags() : void
     {
         //sélectionne tout les tags du message
         preg_match_all('/#([\p{L}\p{N}_]+)/u', $this->message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
