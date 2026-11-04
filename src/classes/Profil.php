@@ -42,4 +42,13 @@ class Profil
             throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Profil.");
         }
     }
+
+    /**
+     * Methode incrementNbTouite pour augmenter le nombre de touite
+     * @return void
+     */
+    public function incrementNbTouite()
+    {
+        $this->nbTouites++;
+    }
 }
