@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
 
-class AfficherTouiteDetailAction implements Action
+class AfficherTouiteDetailAction extends Action
 {
     // Tableau contenant tous les touites disponibles
     private array $listeTouites;
