@@ -2,6 +2,9 @@
 /**
  * Classe Action
  */
-class Action{
+namespace iutnc\touiteur\action;
 
+interface Action
+{
+    public function execute(): string;
 }

@@ -15,7 +15,7 @@ class RendererTouite
      * @param touite à afficher
      * @return touite en format court en code html
      */
-    public static function rendererCourt(Touite $touite): string
+    public static function rendererCourt(Touite $touite, int $id): string
     {
         // comme c'est un affiche court, on affiche que les 100 premiers caractères du touite
         $texteCourt = mb_strimwidth($touite->message, 0, 100, "...");
@@ -26,11 +26,13 @@ class RendererTouite
         $texteCourt = filter_var($texteCourt, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // On construit le html
-        $html = "<article>";
+        $html = "<a href='index.php?action=detail&id=$id'>";
+        $html .= "<article>";
         $html .= "<p>$pseudo</p>";
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
         $html .= "</article>";
+        $html .= "</a>";
 
         return $html;
     }
@@ -50,8 +52,8 @@ class RendererTouite
         $html = "<div>";
 
         // On vient afficher chaque touite en affichage court
-        foreach ($touitesInverses as $touite) {
-            $html .= self::rendererCourt($touite);
+        foreach ($touitesInverses as $id=>$touite) {
+            $html .= self::rendererCourt($touite,$id);
         }
 
         $html .= "</div>";
