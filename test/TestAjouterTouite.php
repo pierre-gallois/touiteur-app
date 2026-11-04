@@ -32,6 +32,8 @@ if (isset($_POST['message'])) {
 
             $utilisateur->ajouterTouite($touite);
 
+            echo "Touite publié !";
+
         } catch (LengthTouiteException $e) {
             echo htmlspecialchars($e->getMessage());
         }
@@ -49,7 +51,7 @@ if (isset($_POST['message'])) {
 
 <body>
 
-    <h1>Publier un touite</h1>
+<h1>Publier un touite</h1>
 
     <form method="POST" action="">
 
@@ -59,11 +61,11 @@ if (isset($_POST['message'])) {
                   maxlength="235"
                   placeholder="Message ..."></textarea>
 
-        <br>
+    <br>
 
-        <input type="submit" value="Publier">
+    <input type="submit" value="Publier">
 
-    </form>
+</form>
 
     <h2>Touites publiés</h2>
 
