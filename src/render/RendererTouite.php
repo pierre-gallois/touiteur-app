@@ -15,7 +15,7 @@ class RendererTouite
      * @param touite à afficher
      * @return touite en format court en code html
      */
-    public static function rendererCourt(Touite $touite): string
+    public static function rendererCourt(Touite $touite, int $id): string
     {
         // comme c'est un affiche court, on affiche que les 100 premiers caractères du touite
         $texteCourt = mb_strimwidth($touite->message, 0, 100, "...");
@@ -26,11 +26,13 @@ class RendererTouite
         $texteCourt = filter_var($texteCourt, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // On construit le html
-        $html = "<article>";
+        $html = "<a href='index.php?action=detail&id=$id'>";
+        $html .= "<article>";
         $html .= "<p>$pseudo</p>";
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
         $html .= "</article>";
+        $html .= "</a>";
 
         return $html;
     }
@@ -50,8 +52,8 @@ class RendererTouite
         $html = "<div>";
 
         // On vient afficher chaque touite en affichage court
-        foreach ($touitesInverses as $touite) {
-            $html .= self::rendererCourt($touite);
+        foreach ($touitesInverses as $id=>$touite) {
+            $html .= self::rendererCourt($touite,$id);
         }
 
         $html .= "</div>";
@@ -91,17 +93,20 @@ class RendererTouite
         return $html;
 
     }
+
+
     /**
-     *méthode  pour afficher les touite d'un utilisateur donné
-     *param  utilisateur pour récuperer ses touites
+     * méthode  pour afficher les touite d'un utilisateur donné
+     * param  utilisateur pour récuperer ses touites
      */
     public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
         // Récupérer uniquement les touites publiés par cet utilisateur
-        $touitesUtilisateur = $utilisateur->touitesPublies;
+        $touitesutilisateur = $utilisateur->touitesPublies;
 
         // Afficher les touites
-        return self::afficherListeTouite($touitesUtilisateur);
+        return self::afficherListeTouite($touitesutilisateur);
     }
+
 
     /**
      * Affiche uniquement les touites associés à un tag donné
@@ -134,5 +139,35 @@ class RendererTouite
         }
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
         return self::afficherListeTouite($listeDesTouitesParTag);
+    }
+
+
+    public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
+    {
+        $ListeTouitesMur = [];
+
+        foreach ($tousLesTouites as $touite){
+            $AchicherSurLeMur = false;
+
+            // si le touite fait partie des auteurs suivis par l'utilisateur
+            if (in_array($touite->auteur, $user->utilisateursSuivis)) {
+                $AfficherSurLeMur = true;
+            }
+
+            // on recherche parmis les tag(s) du touite
+            foreach($touite->tagsSuivis as $tagDuTouite){
+
+                // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
+                foreach ($user->tagsSuivis as $tagAbonne) {
+                    if ($tagDuTouite->libelleTag === $tagAbonne->libelleTag) {
+                        $aAfficherSurLeMur = true;
+                    }
+                }
+            }
+            // met le touite qui est Soit suivie par l'utilisateur, Soit il fait partie des tags suivis (est abonnée au tag)
+            if ($aAfficherSurLeMur){
+                $ListeTouitesMur[] = $touite;
+            }
+        }
     }
 }

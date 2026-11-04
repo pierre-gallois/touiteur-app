@@ -17,7 +17,7 @@ class Utilisateur
     private array $tags = []; // touites par tag donné
     private array $utilisateursSuivis = []; // Utilisateurs que suit(vent) cet utilisateur
     private array $utilisateursAbonnes = []; // utilisateurs abonnés à cet utilisateur
-    private array $tagsSuivis=[]; // Tags suivis par l'utilisateur
+    private array $tagsSuivis = []; // Tags suivis par l'utilisateur
 
     /**
      * Constructeur d'un utilisateur
@@ -53,6 +53,7 @@ class Utilisateur
     public function ajouterTouite(Touite $touite): void
     {
         $this->touitesPublies[] = $touite;
+        $this->profil->incrementNbTouite();
     }
 
     /**
@@ -72,13 +73,16 @@ class Utilisateur
             }
         }
     }
+
+
     /**
-    *Methode pour suivre un tag
-    *@param Tag $tag
-    *@return void
-    */
-    public function suivreTag(Tag $tag){
-        $this->tagsSuivis[]=$tag;
+     *Methode pour suivre un tag
+     * @param Tag $tag
+     * @return void
+     */
+    public function suivreTag(Tag $tag)
+    {
+        $this->tagsSuivis[] = $tag;
     }
 }
 
