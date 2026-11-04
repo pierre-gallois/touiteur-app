@@ -1,6 +1,9 @@
 <?php
 
 namespace iutnc\touiteur\dispatcher;
+
+use iutnc\touiteur\action\AfficherListeTouiteAction;
+
 /**
  * Class Dispatcher
  */
@@ -26,6 +29,10 @@ class Dispatcher
         switch ($this->action) {
             case "default":
                 // TODO faire defaultAction
+                break;
+            case "afficherListeTouite":
+                $obj = new AfficherListeTouiteAction();
+                $resultat = $obj->execute();
                 break;
         }
         $this->renderPage($resultat);
