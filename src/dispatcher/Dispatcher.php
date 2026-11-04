@@ -25,7 +25,10 @@ class Dispatcher
      */
     public function run(): void
     {
+        // Stocker le résulat html de l'action demandée
         $resultat = "";
+
+        // Appel de l'action demandée
         switch ($this->action) {
             case "default":
                 // TODO faire defaultAction
@@ -35,6 +38,8 @@ class Dispatcher
                 $resultat = $obj->execute();
                 break;
         }
+
+        // Affichage du rendu sur le navigateur
         $this->renderPage($resultat);
     }
 
