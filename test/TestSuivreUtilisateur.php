@@ -9,7 +9,7 @@ use iutnc\touiteur\exception\TestFailedException;
 function test_Suivre() {
    // Préparation des données
    // Celui qui va etre suivi
-   $profil      = new Profil("Mousque", "Eloune", "eloune.mousque@touiteur.fr");
+   $profil = new Profil("Mousque", "Eloune", "eloune.mousque@touiteur.fr");
    $eloune = new Utilisateur($profil, "E.Mousque");
 
    // Celui qui va suivre
@@ -20,7 +20,7 @@ function test_Suivre() {
    // Méthode à tester
    $moi->suivreUtilisateur($eloune);
 
-   // Vérification
+   // Vérifications
    $suivis = $moi->utilisateursSuivis;
    if (count($suivis) !== 1) {
        throw new TestFailedException("L'utilisateur \"\$moi\" devrait avoir 1 personne suivie. Obtenu : " . count($suivis));
