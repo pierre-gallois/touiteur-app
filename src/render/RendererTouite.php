@@ -160,14 +160,16 @@ class RendererTouite
                 // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
                 foreach ($user->tagsSuivis as $tagAbonne) {
                     if ($tagDuTouite->libelleTag === $tagAbonne->libelleTag) {
-                        $aAfficherSurLeMur = true;
+                        $AfficherSurLeMur = true;
                     }
                 }
             }
             // met le touite qui est Soit suivie par l'utilisateur, Soit il fait partie des tags suivis (est abonnée au tag)
-            if ($aAfficherSurLeMur){
+            if ($AfficherSurLeMur){
                 $ListeTouitesMur[] = $touite;
             }
         }
+        // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
+        return self::afficherListeTouite($AfficherSurLeMur);
     }
 }
