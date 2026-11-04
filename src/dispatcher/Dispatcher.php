@@ -1,6 +1,9 @@
 <?php
 
 namespace iutnc\touiteur\dispatcher;
+
+use iutnc\touiteur\action\AfficherListeTouiteAction;
+
 /**
  * Class Dispatcher
  */
@@ -22,12 +25,21 @@ class Dispatcher
      */
     public function run(): void
     {
+        // Stocker le résulat html de l'action demandée
         $resultat = "";
+
+        // Appel de l'action demandée
         switch ($this->action) {
             case "default":
                 // TODO faire defaultAction
                 break;
+            case "afficherListeTouite":
+                $obj = new AfficherListeTouiteAction();
+                $resultat = $obj->execute();
+                break;
         }
+
+        // Affichage du rendu sur le navigateur
         $this->renderPage($resultat);
     }
 
