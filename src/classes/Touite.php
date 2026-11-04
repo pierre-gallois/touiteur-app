@@ -12,18 +12,20 @@ use iutnc\touiteur\exception\InvalidPropertyException;
 class Touite
 {
     // Attributs
-    private String $message;      // Le contenu du touite
-    private String $date;          // La date du touite
-    private Utilisateur $auteur; // L'auteur du touite
-    private array $tags = []; // Liste vide avec par défaut 0 tag
-
+    private string $message;    // Le contenu du touite
+    private string $date;       // La date du touite
+    private Utilisateur $auteur;// L'auteur du touite
+    private array $tags = [];   // Liste vide avec par défaut 0 tag
+    private int $id;
+    // Générateur d'id
+    private static int $increment = 0;
     /**
      * Constructeur qui construit un touite
      * @param message le message du touite
      * @param auteur du touite
      * @param date du touite
      */
-    public function __construct(String $message, Utilisateur $auteur, String $date)
+    public function __construct(string $message, Utilisateur $auteur, string $date)
     {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
@@ -36,8 +38,8 @@ class Touite
         $this->date = $date;
 
         // On extrait les tags valides du message de plus, les invalides sont ignorés
-        $this->extraireTags($message);
-
+        $this->extraireTags();
+        $this->id = self::$increment++; // Associe un id & incremente pour le prochain.
     }
 
     /**
@@ -59,10 +61,10 @@ class Touite
      * Methode extraiteTags qui extrait les tags du message
      * @param message dans lequel on veut extraire les tags
      */
-    public function extraireTags(String $message) : void
+    public function extraireTags(): void
     {
         //sélectionne tout les tags du message
-        preg_match_all('/#([\p{L}\p{N}_]+)/u', $message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
+        preg_match_all('/#([\p{L}\p{N}_]+)/u', $this->message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
         // détaille : \p{L} = n'importe quelle lettre (même avec accent), \p{N} = n'importe quel chiffre, et u = mode UTF-8
 
         // On supprime les doublons possible
@@ -71,9 +73,9 @@ class Touite
         // on met tous les tags trouvé un par 1 dans le libelle
         foreach ($libellesUniques as $libelle) {
             if (Tag::estLibelleValide($libelle)) {
-                $this->tags[] = new Tag(0, $libelle, "");
+                $this->tags[] = new Tag($libelle, "");
             }
         }
     }
-
+}
 

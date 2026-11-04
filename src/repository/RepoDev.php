@@ -2,36 +2,97 @@
 
 namespace iutnc\touiteur\repository;
 
-use iutnc\touiteur\repository\Repository;
+use iutnc\touiteur\classes\Tag;
+use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Touite;
+use InvalidArgumentException;
 
 /**
  * Imite un vrai Repository qui ferait le lien entre le code et la base de donnée
  * On a pas encore la base de donnée, alors celui-ci stocke dans des attributs.
  */
 class RepoDev extends Repository {
-    public static string $TOUITES      = "touites";
-    public static string $UTILISATEURS = "utilsateurs";
-
     // Les "tables" de la "base de donnée"
     private array $touites;
     private array $utilisateurs;
-    private int $increment;
+    private array $tags;
+
 
     protected function __construct(){
         $this->touites = [];
         $this->utilisateurs = [];
-        $this->increment = 0;
+        $this->tags = [];
     }
 
-
-    protected function stocker(string $table, mixed $data): int
+    private function stockerTouite(Touite $touite)
     {
-        $this->$table[$this->increment++] = $data;
-        return $this->increment - 1;
+        if (array_key_exists($touite->auteur->pseudo, $this->utilisateurs)) {
+            $this->touites[$touite->id] = $touite;
+        }
     }
 
-    public function recuperer(string $table, int $id) : mixed {
-        return $this->$table[$id];
+    private function stockerUtilisateur(Utilisateur $utilisateur)
+    {
+        $this->utilisateurs[$utilisateur->pseudo] = $utilisateur;
     }
+
+    private function stockerTag(Tag $tag)
+    {
+        $this->tags[$tag->libelleTag] = $tag;
+    }
+
+
+    public function stocker(mixed $data) {
+        if ($data instanceof Touite){
+            $nombreTouites = count($this->touites);
+            $this->stockerTouite($data);
+            if (count($this->touites) > $nombreTouites) {
+                foreach ($data->tags as $tag) {
+                    $this->stockerTag($tag);
+                }
+            }
+        } elseif ($data instanceof Utilisateur) {
+            $this->stockerUtilisateur($data);
+        } elseif ($data instanceof Tag) {
+            $this->stockerTag($data);
+        }
+        else {
+            throw new \InvalidArgumentException("Le type de donnée entrée ne peut pas être stocké.");
+        }
+    }
+
+    public function getTouite(mixed $id) : Touite
+    {
+        if (array_key_exists($id, $this->touites)) return $this->touites[$id];
+        throw new InvalidArgumentException("Aucun touite avec cet id");
+    }
+
+    public function getUtilisateur(mixed $id) : Utilisateur
+    {
+        if (array_key_exists($id, $this->utilisateurs)) return $this->utilisateurs[$id];
+        throw new InvalidArgumentException("Aucun utilisateur avec cet id");
+    }
+
+    public function getTag(mixed $id) : Tag
+    {
+        if (array_key_exists($id, $this->tags)) return $this->tags[$id];
+        throw new InvalidArgumentException("Aucun tag avec cet id");
+    }
+
+    public function getTouites(): array
+    {
+        return $this->touites;
+    }
+
+    public function getUtilisateurs(): array
+    {
+        return $this->utilisateurs;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+
 }
