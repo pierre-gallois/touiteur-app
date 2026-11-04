@@ -140,11 +140,21 @@ class RendererTouite
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
         return self::afficherListeTouite($listeDesTouitesParTag);
     }
+
+
+    /**
+     * Affiche le mur qui sont les touites suivie par l'utilisateur et/ou sont des tags suivis par l'utilisateur (= abonnée au tag)
+     * @param Utilisateur $user l'utilisateur dont on veut afficher le mur
+     * @param Touite[] $touites la liste complète des touites
+     * @return string le code HTML du mur
+     */
     public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
     {
         $ListeTouitesMur = [];
 
         foreach ($tousLesTouites as $touite){
+
+            // par défaut on affiche pas les tout les touites
             $AchicherSurLeMur = false;
 
             // si le touite fait partie des auteurs suivis par l'utilisateur
@@ -155,14 +165,15 @@ class RendererTouite
             // on recherche parmis les tag(s) du touite
             foreach($touite->tagsSuivis as $tagDuTouite){
 
-                // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
+                // pour chaque tag(s) suivis par l'utilisateur
                 foreach ($user->tagsSuivis as $tagAbonne) {
+                    // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
                     if ($tagDuTouite->libelleTag === $tagAbonne->libelleTag) {
                         $AfficherSurLeMur = true;
                     }
                 }
             }
-            // met le touite qui est Soit suivie par l'utilisateur, Soit il fait partie des tags suivis (est abonnée au tag)
+            // met le touite dans les touite à afficher, si il est suivie par l'utilisateur et/ou dans les tags suivis (= abonnée au tag)
             if ($AfficherSurLeMur){
                 $ListeTouitesMur[] = $touite;
             }
