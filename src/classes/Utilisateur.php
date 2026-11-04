@@ -52,7 +52,7 @@ class Utilisateur
     *@return void
     */
     public function suivreTag(Tag $tag){
-        this->tagsSuivis[]=$tag;
+        $this->tagsSuivis[]=$tag;
     }
 }
 
