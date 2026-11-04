@@ -9,6 +9,7 @@ use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
+use iutnc\touiteur\action\DefaultAction;
 
 $dispatcher = (new Dispatcher())
     ->addRoute('Abonner Tag', ActionAbonnerTag::class)
@@ -16,12 +17,13 @@ $dispatcher = (new Dispatcher())
     ->addRoute('Afficher tout le touite', AfficherTouiteDetailAction::class)
     ->addRoute('Afficher touite(s) utilisateur', AfficherTouitesUtilisateurAction::class)
     ->addRoute('afficher liste touite', AfficherListeTouiteAction::class)
-    ->addRoute('Afficher Influenceur', AfficherInfluenceurAction::class);
+    ->addRoute('Afficher Influenceur', AfficherInfluenceurAction::class)
+    ->addRoute('default', DefaultAction::class);
 
 try {
     echo $dispatcher->run();
 } catch (DispatcherException $e) {
-    echo "Erreur d'affichage";
+    echo "404 : Not found.";
 }
 
 
