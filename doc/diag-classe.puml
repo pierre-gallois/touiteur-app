@@ -33,6 +33,7 @@ class Utilisateur {
 '   Social
     + suivreUtilisateur(Utilisateur) : void
 '    + suivreTag(Tag)
+
     + __get(string) : mixed
 }
 
