@@ -67,23 +67,23 @@ class RendererTouite
      * récupere de touite le pseudo , le message et la date en utilisant un filtre
      */
     public static function  aff_touite_detail(Touite $touite): string{
-        //filtre le pseudo de l'auteur
+        //Filtre le pseudo de l'auteur
         $pseudo = filter_var(
             $touite->auteur->pseudo,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-        //filtre le message du touite
+        //Filtre le message du touite
         $message = filter_var(
             $touite->message,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
-        // filtre la date du touite
+        // Filtre la date du touite
         $date = filter_var(
             $touite->date,
             FILTER_SANITIZE_SPECIAL_CHARS
         );
 
-        //affichage du touite
+        //Affichage du touite
         $html = "<article>";
         $html .= "<h2>" . $pseudo . "</h2>";
         $html .= "<p>" . $message . "</p>";
@@ -140,8 +140,6 @@ class RendererTouite
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
         return self::afficherListeTouite($listeDesTouitesParTag);
     }
-
-
     public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
     {
         $ListeTouitesMur = [];
