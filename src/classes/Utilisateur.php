@@ -15,6 +15,7 @@ class Utilisateur
     private array $touitesPublies = []; // touites publiés par l'utilisateur
     private array $touitesSuivis = []; // touites des utilisateurs suivis
     private array $tags = []; // touites par tag donné
+    private array $tagsSuivis=[]; // Tags suivis par l'utilisateur
 
     /**
      * Constructeur d'un utilisateur
@@ -43,6 +44,15 @@ class Utilisateur
     public function ajouterTouite(Touite $touite): void
     {
         $this->touitesPublies[] = $touite;
+    }
+
+    /**
+    *Methode pour suivre un tag
+    *@param Tag $tag
+    *@return void
+    */
+    public function suivreTag(Tag $tag){
+        this->tagsSuivis[]=$tag;
     }
 }
 

@@ -15,7 +15,7 @@ class Touite
     private String $message;      // Le contenu du touite
     private String $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
-    private array $tags = []; // // Liste vide avec par défaut 0 tag
+    private array $tags = []; // Liste vide avec par défaut 0 tag
 
     /**
      * Constructeur qui construit un touite
@@ -76,4 +76,4 @@ class Touite
         }
     }
 
-}
+
