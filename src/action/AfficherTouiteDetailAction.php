@@ -24,7 +24,6 @@ class AfficherTouiteDetailAction extends Action
         // Vérifie que l'identifiant existe
         if (
             $id === null ||
-            $id === false ||
             !array_key_exists($id, $this->listeTouites)
         ) {
             // Retourne un message si le touite est introuvable
