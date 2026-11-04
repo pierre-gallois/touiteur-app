@@ -16,7 +16,7 @@ class Utilisateur
     private array $touitesSuivis = []; // touites des utilisateurs suivis
     private array $tags = []; // touites par tag donné
     private array $utilisateursSuivis = []; // Utilisateurs que suit(vent) cet utilisateur
-    private array $touitesAbonnes = []; // utilisateurs abonnés à cet utilisateur
+    private array $utilisateursAbonnes = []; // utilisateurs abonnés à cet utilisateur
 
     /**
      * Constructeur d'un utilisateur
@@ -59,8 +59,12 @@ class Utilisateur
      * @param Utilisateur $user l'utilisateur à suivre
      * @return void
      */
-    public function suivreUtilisateur(Utilisateur $user) : void {
-        $this->utilisateursSuivis[] = $user;
+    public function suivreUtilisateur(Utilisateur $user): void
+    {
+        if ($user !== $this) { // On vérifie que l'utilisateur ne veut pas s'auto-suivre
+            $this->utilisateursSuivis[] = $user;
+            $user->utilisateursAbonnes[] = $this; // On ajoute à l'utilisateur qu'on suit, qu'on est abonné à lui
+        }
     }
 }
 
