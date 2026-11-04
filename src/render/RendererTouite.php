@@ -99,10 +99,10 @@ class RendererTouite
      */
     public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
         // Récupérer uniquement les touites publiés par cet utilisateur
-        $touitesUtilisateur = $utilisateur->touitesPublies;
+        $touitesutilisateur = $utilisateur->touitesPublies;
 
         // Afficher les touites
-        return self::afficherListeTouite($touitesUtilisateur);
+        return self::afficherListeTouite($touitesutilisateur);
     }
 
 
@@ -145,18 +145,26 @@ class RendererTouite
         $ListeTouitesMur = [];
 
         foreach ($tousLesTouites as $touite){
-            $AAchicherSurLeMur = false;
+            $AchicherSurLeMur = false;
 
-            // si le touite fait partie des touites Suivis par l'utilisateur
-            if(in_array($touite, $user -> touitesSuivis)){
-                $AAchicherSurLeMur = true;
+            // si le touite fait partie des auteurs suivis par l'utilisateur
+            if (in_array($touite->auteur, $user->utilisateursSuivis)) {
+                $AfficherSurLeMur = true;
             }
 
             // on recherche parmis les tag(s) du touite
-            foreach($touite->tags as $tagDuTouite){
-                //  si il à un tag qui est suivie/abonner par l'utilisateur
-                // toto
+            foreach($touite->tagsSuivis as $tagDuTouite){
 
+                // si l'utilisateur à un tag qui est Abonne/Suivie par l'utilisateur
+                foreach ($user->tagsSuivis as $tagAbonne) {
+                    if ($tagDuTouite->libelleTag === $tagAbonne->libelleTag) {
+                        $aAfficherSurLeMur = true;
+                    }
+                }
+            }
+            // met le touite qui est Soit suivie par l'utilisateur, Soit il fait partie des tags suivis (est abonnée au tag)
+            if ($aAfficherSurLeMur){
+                $ListeTouitesMur[] = $touite;
             }
         }
     }
