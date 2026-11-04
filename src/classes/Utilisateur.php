@@ -61,7 +61,10 @@ class Utilisateur
      * @return void
      */
     public function suivreUtilisateur(Utilisateur $user) : void {
-        $this->utilisateursSuivis[] = $user;
+        // Vérifier que l'utilisateur ne le suit pas déjà.
+        if (!in_array($user, $this->utilisateursSuivis)) {
+            $this->utilisateursSuivis[] = $user;
+        }
     }
 
     /**
