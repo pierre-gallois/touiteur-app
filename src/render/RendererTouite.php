@@ -91,9 +91,11 @@ class RendererTouite
         return $html;
 
     }
+
+
     /**
-     *méthode  pour afficher les touite d'un utilisateur donné
-     *param  utilisateur pour récuperer ses touites
+     * méthode  pour afficher les touite d'un utilisateur donné
+     * param  utilisateur pour récuperer ses touites
      */
     public  static function aff_touite_utilisateur(Utilisateur $utilisateur): string{
         // Récupérer uniquement les touites publiés par cet utilisateur
@@ -102,6 +104,7 @@ class RendererTouite
         // Afficher les touites
         return self::afficherListeTouite($touitesutilisateur);
     }
+
 
     /**
      * Affiche uniquement les touites associés à un tag donné
@@ -134,5 +137,27 @@ class RendererTouite
         }
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
         return self::afficherListeTouite($listeDesTouitesParTag);
+    }
+
+
+    public function afficherMurUtilisateur(Utilisateur $user, array $tousLesTouites) : String
+    {
+        $ListeTouitesMur = [];
+
+        foreach ($tousLesTouites as $touite){
+            $AAchicherSurLeMur = false;
+
+            // si le touite fait partie des touites Suivis par l'utilisateur
+            if(in_array($touite, $user -> touitesSuivis)){
+                $AAchicherSurLeMur = true;
+            }
+
+            // on recherche parmis les tag(s) du touite
+            foreach($touite->tags as $tagDuTouite){
+                //  si il à un tag qui est suivie/abonner par l'utilisateur
+                // toto
+
+            }
+        }
     }
 }
