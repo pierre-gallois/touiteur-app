@@ -1,26 +1,25 @@
 <?php
 
 namespace iutnc\touiteur\action;
-
+use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\render\RendererTouite;
 
 class AfficherTouitesUtilisateurAction extends Action {
-    // Tableau contenant les utilisateurs de l'application
-    private array $listeUtilisateurs;
-
-    // Constructeur : récupère la liste des utilisateurs
-    public function __construct(array $listeUtilisateurs) {
-        $this->listeUtilisateurs = $listeUtilisateurs;
-    }
 
     // Exécute l'action permettant d'afficher les touites d'un utilisateur
     public function execute() : string
     {
+        // Récupération du repository
+        $repo = RepoDev::getInstance();
+
         // Récupère le pseudo de l'utilisateur depuis l'URL
         $pseudo = $_GET['pseudo'] ?? '';
 
+        // Récupère la liste des utilisateurs
+        $listeUtilisateurs = $repo->getUtilisateurs();
+
         // Parcourt la liste des utilisateurs
-        foreach ($this->listeUtilisateurs as $utilisateur) {
+        foreach ($listeUtilisateurs as $utilisateur) {
 
             // Vérifie si le pseudo correspond à celui recherché
             if ($utilisateur->pseudo === $pseudo) {
