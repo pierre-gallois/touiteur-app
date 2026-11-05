@@ -11,5 +11,12 @@ class ActionAbonnerTag {
 
         // L'utilisateur suit le tag
         $utilisateur->suivreTag($tag);
+
+        // Récupération du repository
+        $repo = RepoDev::getInstance();
+
+        // Enregistrement de l'utilisateur et du tag
+        $repo->stocker($utilisateur);
+        $repo->stocker($tag);
     }
 }
