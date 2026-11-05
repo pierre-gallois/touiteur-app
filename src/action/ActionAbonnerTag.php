@@ -2,13 +2,6 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\classes\Utilisateur;
-use iutnc\touiteur\classes\Tag;
-
-<?php
-
-namespace iutnc\touiteur\classes\actions;
-
 use iutnc\touiteur\repository\RepoDev;
 
 class ActionAbonnerTag {
