@@ -1,36 +1,38 @@
 <?php
 
 namespace iutnc\touiteur\action;
-
+use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\render\RendererTouite;
 
 class AfficherTouiteDetailAction extends Action {
-    // Tableau contenant tous les touites disponibles
-    private array $listeTouites;
-
-    // Constructeur : récupère la liste des touites
-    public function __construct(array $listeTouites) {
-        $this->listeTouites = $listeTouites;
-    }
 
     // Exécute l'action permettant d'afficher un touite en détail
     public function execute() : string
     {
+        // Récupère le repository
+        $repo = RepoDev::getInstance();
+
         // Récupère l'identifiant du touite dans l'URL
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-        // Vérifie que l'identifiant existe
-        if (
-            $id === null ||
-            !array_key_exists($id, $this->listeTouites)
-        ) {
-            // Retourne un message si le touite est introuvable
+        // Vérifie que l'id est valide
+        if ($id === null) {
             return '<p>Touite introuvable.</p>';
         }
+        // Récupère la liste des touites
+        $listeTouites = $repo->getTouites();
 
-        // Récupère le touite correspondant à l'identifiant et lance la fonction de l'affichage
-        return RendererTouite::aff_touite_detail(
-            $this->listeTouites[$id]
-        );
+        // Parcourt la liste des touites
+        foreach ($listeTouites as $touite) {
+
+            // Vérifie si l'id correspond à celui recherché
+            if ($touite->id === $id) {
+
+                // Demande au Renderer d'afficher le touite en détail
+                return RendererTouite::aff_touite_detail($touite);
+            }
+        }
+        // Si aucun touite n'a été trouvé
+        return '<p>Touite introuvable.</p>';
     }
 }
