@@ -3,7 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
-use iutnc\touiteur\classes\actions\ActionAbonnerTag;
+use iutnc\touiteur\classes\actions\AbonnerTagAction;
 use iutnc\touiteur\classes\actions\ActionPublierTouite;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
@@ -14,6 +14,9 @@ use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Profil;
 use \iutnc\touiteur\classes\Touite;
+
+// Démarrage de la session
+session_start();
 
 // Bases de données (en dur)
 // Sera remplacée dans un config plus tard
@@ -30,7 +33,7 @@ try {
 
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
-    ->addRoute('abonner-tag', ActionAbonnerTag::class)
+    ->addRoute('abonner-tag', AbonnerTagAction::class)
     ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
@@ -51,4 +54,16 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 else {
     // TODO: run un login page
 }
+
+<form method="POST" action="index.php?action=publier-touite">
+    <h2>Publier un touite</h2>
+    <textarea name="message" maxlength="235"></textarea>
+    <button type="submit">Publier</button>
+</form>
+
+<form method="POST" action="index.php?action=abonner-tag">
+    <h2>S abonner à un tag</h2>
+    <input type="text" name="idTag" value="123456">
+    <button type="submit">S abonner</button>
+</form>
 
