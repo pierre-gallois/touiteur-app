@@ -62,8 +62,8 @@ else {
 </form>
 
 <form method="POST" action="index.php?action=abonner-tag">
-    <h2>S'abonner à un tag</h2>
+    <h2>S abonner à un tag</h2>
     <input type="text" name="idTag" value="123456">
-    <button type="submit">S'abonner</button>
+    <button type="submit">S abonner</button>
 </form>
 
