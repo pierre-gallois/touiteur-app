@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '../../vendor/autoload.php';
 
 use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\classes\Utilisateur;
