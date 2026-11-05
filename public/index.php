@@ -3,7 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
-use iutnc\touiteur\classes\actions\ActionAbonnerTag;
+use iutnc\touiteur\classes\actions\AbonnerTagAction;
 use iutnc\touiteur\classes\actions\ActionPublierTouite;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
@@ -33,7 +33,7 @@ try {
 
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
-    ->addRoute('abonner-tag', ActionAbonnerTag::class)
+    ->addRoute('abonner-tag', AbonnerTagAction::class)
     ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)

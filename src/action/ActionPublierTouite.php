@@ -1,41 +1,91 @@
 <?php
 
-namespace iutnc\touiteur\classes\actions;
+namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\exception\LengthTouiteException;
+use iutnc\touiteur\render\RendererTouite;
+use iutnc\touiteur\repository\RepoDev;
 
-class ActionPublierTouite {
+/**
+ * Classe PublierTouiteAction qui permet l'intéraction avec l'utilisateur de publier un touite
+ */
+class ActionPublierTouite extends Action
+{
 
-    public function execute(): string {
+    /**
+     * Méthode publierTouite qui publie un touite d'un utilisateur
+     * @return string un code html affichant le touite en détail pour montrer qu'il a bien été posté
+     * @throws LengthTouiteException si le touite dépasse 235 caractères
+     */
+    public function execute(): string
+    {
+        // On vérifie que l'utilisateur est bien dans une session
+        if (!isset($_SESSION['utilisateur'])) {
+            return "<p>Erreur : vous devez être connecté pour publier un touite.</p>";
+        }
+        // On récupère l'utilisateur
+        $utilisateur = $_SESSION['utilisateur'];
 
-        $repo = RepoDev::getInstance();
+        // Structure html
+        $html = "<h1>Publier un touite</h1>";
 
-        // Récupération du message
-        $message = trim($_POST['message'] ?? '');
+        $touite = null;
+        // On regarde si le formulaire a bien été envoyé
+        if ($this->http_method === 'POST') {
+            $message = $_POST['message'];
 
-        // Récupération de l'utilisateur connecté
-        $utilisateur = $repo->getUtilisateur($_SESSION['pseudo']);
+            if ($message === "") {
+                $html .= "<p>Un message ne peut pas être vide</p>";
+            } else {
+                // Création du touite
+                try {
+                    $touite = new Touite(
+                        $message,
+                        $utilisateur,
+                        date('Y-m-d H:i:s')
+                    );
 
-        if ($message === '') {
-            return "Le message ne peut pas être vide.";
+                // Ajout du touite à l'utilisateur
+                $utilisateur->ajouterTouite($touite);
+
+                // On enregistre le touite dans la base de donnée
+                $repo = RepoDev::getInstance();
+                $repo->stocker($touite);
+
+                // rendu html
+                $html .= "<p>Touite publié !</p>";
+                } catch (LengthTouiteException $e) {
+                    $html .= "<p>{$e->getMessage()}</p>";
+                }
+
+            }
         }
 
-        try {
-            $touite = new Touite(
-                $message,
-                $utilisateur,
-                date('Y-m-d H:i:s')
-            );
+        // zone pour écrire et publié son touite
+        $html .= <<<HTML
+<form method="POST" action="">
 
-            $utilisateur->ajouterTouite($touite);
-            $repo->stocker($touite);
+        <textarea name="message"
+                  rows="5"
+                  cols="30"
+                  maxlength="235"
+                  placeholder="Message ..."></textarea>
 
-            return "Touite publié avec succès !";
+    <br>
 
-        } catch (LengthTouiteException $e) {
-            return $e->getMessage();
+    <input type="submit" value="Publier">
+
+</form>
+HTML;
+        // On affiche le touite si l'utilisateur vient de le poster
+        if ($touite !== null) {
+            $html .= "<p>Touite qui vient d'être posté : </p>";
+            $html .= RendererTouite::aff_touite_detail($touite);
         }
+
+        $html .= "<h1>Touites déjà postés :</h1>";
+        $html .= RendererTouite::aff_touite_utilisateur($utilisateur);
+        return $html;
     }
 }
