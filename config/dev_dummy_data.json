@@ -1,0 +1,110 @@
+{
+  "users" : {
+    "E.Mousque" : {
+      "nom" : "Mousque",
+      "prenom" : "Eloun",
+      "email" : "mousque.eloun@touiteur.fr",
+      "utilisateursSuivis" : ["PesosDu32"],
+      "tagsSuivis" : ["Edison"]
+    },
+    "PesosDu32" : {
+      "nom" : "Pesos",
+      "prenom" : "George",
+      "email" : "george.pesos@dollar.us",
+      "utilisateursSuivis" : ["E.Mousque"],
+      "tagsSuivis" : ["greve"]
+    },
+    "M.Sucreberg" : {
+      "nom" : "Sucreberg",
+      "prenom" : "Marc",
+      "email" : "marc.sucreberg@example.test",
+      "utilisateursSuivis" : ["E.Mousque"],
+      "tagsSuivis" : ["metaveste", "cafe"]
+    },
+    "AdaLovebug" : {
+      "nom" : "Lovebug",
+      "prenom" : "Ada",
+      "email" : "ada.lovebug@example.test",
+      "utilisateursSuivis" : ["M.Sucreberg", "PesosDu32"],
+      "tagsSuivis" : ["bug", "algorithme"]
+    }
+  },
+  "tags" : [
+    {
+      "libelle" : "Edison",
+      "description" : "La marque de véhicules électrique d'Eloun Mousque."
+    },
+    {
+      "libelle" : "greve",
+      "description" : ""
+    },
+    {
+      "libelle" : "bug",
+      "description" : "Un petit problème qui attend souvent le commit pour apparaitre."
+    },
+    {
+      "libelle" : "cafe",
+      "description" : "La ressource indispensable au démarrage de toute équipe de dev."
+    },
+    {
+      "libelle" : "metaveste",
+      "description" : "Un monde virtuel ou même les réunions sont froides."
+    },
+    {
+      "libelle" : "algorithme",
+      "description" : "Une suite d'instructions qui decide parfois ce que vous allez regarder ensuite."
+    }
+  ],
+  "touites": [
+    {
+      "message" : "J'ai lancé ma marque de véhicules électriques #Edison. Ils ont une autonomie incroyable : ils arrivent jusqu'à la prise la plus proche !",
+      "auteur" : "E.Mousque",
+      "date" : "01.01.2001"
+    },
+    {
+      "message" : "J'ai promis de faire une #greve jusqu'à ce que la machine à café arrête de distribuer de l'eau chaude goût clavier.",
+      "auteur" : "PesosDu32",
+      "date" : "02.01.2001"
+    },
+    {
+      "message" : "Mon véhicule #Edison est tellement silencieux que même mon voisin pense que je suis encore en télétravail.",
+      "auteur" : "E.Mousque",
+      "date" : "03.01.2001"
+    },
+    {
+      "message" : "Réunion à 8h : c'est moi qui l'ai organisée, mais je m'en suis rappelé à 9h.",
+      "auteur" : "PesosDu32",
+      "date" : "04.01.2001"
+    },
+    {
+      "message" : "J'ai demandé à mon GPS le chemin vers le succès. Il m'a répondu : faites demi-tour dès que possible. #Edison",
+      "auteur" : "E.Mousque",
+      "date" : "05.01.2001"
+    },
+    {
+      "message" : "J'ai corrige un #bug tellement ancien qu'il avait probablement un compte retraite.",
+      "auteur" : "AdaLovebug",
+      "date" : "06.01.2001"
+    },
+    {
+      "message" : "Le #cafe est pret. Le code aussi, mais lui a besoin de trois recompilations.",
+      "auteur" : "M.Sucreberg",
+      "date" : "07.01.2001"
+    },
+    {
+      "message" : "Un nouveau #bug est apparu juste après que j'ai dit : ca devrait fonctionner.",
+      "auteur" : "AdaLovebug",
+      "date" : "08.01.2001"
+    },
+    {
+      "message" : "Lancer des tests ça marche pas. Lancez vos ordinateurs à la place. #metaveste",
+      "auteur" : "M.Sucreberg",
+      "date" : "09.01.2001"
+    },
+    {
+      "message" : "Bonne nouvelle : le #bug est parti. Mauvaise nouvelle : le projet ne marche tout simplement pas. #algorithme",
+      "auteur" : "AdaLovebug",
+      "date" : "10.01.2001"
+    }
+  ]
+}

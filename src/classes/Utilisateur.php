@@ -66,12 +66,10 @@ class Utilisateur {
     public function suivreUtilisateur(Utilisateur $user) : void
     {
         if ($user !== $this) { // On vérifie que l'utilisateur ne veut pas s'auto-suivre
-            $this->utilisateursSuivis[] = $user;
-            $user->utilisateursAbonnes[] = $this; // On ajoute à l'utilisateur qu'on suit, qu'on est abonné à lui
-
             // Vérifier que l'utilisateur ne le suit pas déjà avant de l'ajouter dans utilisateursSuivis.
             if (!in_array($user, $this->utilisateursSuivis)) {
                 $this->utilisateursSuivis[] = $user;
+                $user->utilisateursAbonnes[] = $this; // On ajoute à l'utilisateur qu'on suit, qu'on est abonné à lui
             }
         }
     }
@@ -89,4 +87,3 @@ class Utilisateur {
 }
 
 ?>
-
