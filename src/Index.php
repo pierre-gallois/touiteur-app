@@ -38,9 +38,17 @@ $dispatcher = (new Dispatcher())
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
 
-// Exécution action
-try {
-    echo $dispatcher->run();
-} catch (DispatcherException $e) {
-    echo "404 : Not found.";
+// Connecté
+if (session_status() === PHP_SESSION_ACTIVE) {
+    // Exécution action
+    try {
+        echo $dispatcher->run();
+    } catch (DispatcherException $e) {
+        echo "404 : Not found.";
+    }
 }
+// Non connecté
+else {
+    // TODO: run un login page
+}
+
