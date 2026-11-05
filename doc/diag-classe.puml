@@ -55,18 +55,42 @@ class Tag {
     + __get(string) : mixed
 }
 
+
+abstract class Repository {
+    - {static} instance : self
+    # {abstract} __construct()
+    + getInstance() : self
+}
+
+class RepoDev {
+    - touites : array
+    - utilisateurs: array
+    - tags: array
+    # __construct()
+    + getUtilisateurs() : array
+    + getUtilisateur(string) : array
+    + getTouites() : array
+    + getTouite(int) : array
+    + getTags() : array
+    + getTag(int) : array
+
+}
+class RepoBD {
+    {abstract}à coder dans la partie BD
+}
+Repository <|-- RepoDev : etend
+Repository <|-- RepoBD : etend
+
 Utilisateur "1" -> "*" Touite      : - touites
 Touite      " " <- "*" Tag         : - tags
 Utilisateur "*" <- " " Touite      : - auteur
-Profil "1" <- " "Utilisateur       : - profil
+Profil      "1" <- " " Utilisateur : - profil
 
 ' ↓ ↓ ↓ ↓ [R&D] ↓ ↓ ↓ ↓
 'abstract class Suivable {}
 'Suivable "*" <- Suivable : - suivis
 'Suivable <|-- Tag : etend
 'Suivable <|-- Utilisateur: etend
-
-class A
 
 
 @enduml
