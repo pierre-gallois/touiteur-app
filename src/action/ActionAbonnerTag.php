@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\touiteur\classes\actions;
+namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\classes\Tag;
