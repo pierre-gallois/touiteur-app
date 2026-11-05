@@ -84,7 +84,7 @@ HTML;
             $html .= RendererTouite::aff_touite_detail($touite);
         }
 
-        $html .= "Touites déjà postés : ";
+        $html .= "<h1>Touites déjà postés :</h1>";
         $html .= RendererTouite::aff_touite_utilisateur($utilisateur);
         return $html;
     }
