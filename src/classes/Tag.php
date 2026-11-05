@@ -10,12 +10,8 @@ use iutnc\touiteur\exception\InvalidPropertyException;
  */
 class Tag {
     // Attributs
-    private int $idTag; // identifiant du tag
     private string $libelleTag; // libellé du tag, sans le caractère #
     private string $descriptionTag; // description du tag
-    // Générateur de tag
-    private static int $increment = 0;
-
 
     /**
      * Constructeur qui construit un tag
@@ -32,7 +28,6 @@ class Tag {
             throw new InvalidTagException("Libellé de tag invalide : " . $libelleTag);
         }
 
-        $this->idTag = self::$increment++;
         $this->libelleTag = $libelleTag;
         $this->descriptionTag = $descriptionTag;
     }
