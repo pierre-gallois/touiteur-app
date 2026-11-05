@@ -13,6 +13,7 @@ class DefaultAction extends Action{
     /**
      * Méthode execute qui va afficher une page par défaut
      * @return string la page au format html
+     *
      */
     public function execute() : string
     {
