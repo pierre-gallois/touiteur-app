@@ -1,3 +1,4 @@
+
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -11,24 +12,29 @@ use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\repository\RepoDev;
-use iutnc\touiteur\classes\Utilisateur;
-use iutnc\touiteur\classes\Profil;
-use \iutnc\touiteur\classes\Touite;
 
 // Démarrage de la session
 session_start();
 
-// Bases de données (en dur)
-// Sera remplacée dans un config plus tard
+// Chargement des données
 $repo = RepoDev::getInstance();
-try {
-    // Création de quelques utilisateurs
-    $jean = new Utilisateur(new Profil("Jean", "Dupont", "jdupont@dupont.jean"), "JeanDu08");
-    $repo->stocker($jean);
-    $repo->stocker(new Touite("Je suis Jean", $jean, "04.11.2026 17.09.44"));
+$repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
-} catch (\iutnc\touiteur\exception\LengthTouiteException $e) {
-    echo $e->getMessage();
+// Gestion de la connexion
+if (isset($_GET['action']) && $_GET['action'] === 'login') {
+
+    $pseudo = $_POST['pseudo'] ?? '';
+
+    try {
+        $utilisateur = $repo->getUtilisateur($pseudo);
+        $_SESSION['utilisateur'] = $utilisateur->pseudo;
+
+        header('Location: index.php');
+        exit();
+
+    } catch (\InvalidArgumentException $e) {
+        // Utilisateur introuvable
+    }
 }
 
 // Création Dispatcher
@@ -41,29 +47,26 @@ $dispatcher = (new Dispatcher())
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
 
-// Connecté
-if (session_status() === PHP_SESSION_ACTIVE) {
-    // Exécution action
+// Vérifie si l'utilisateur est connecté
+if (!empty($_SESSION['utilisateur'])) {
+
+    // Exécution de l'action
     try {
         echo $dispatcher->run();
     } catch (DispatcherException $e) {
         echo "404 : Not found.";
     }
-}
-// Non connecté
-else {
-    // TODO: run un login page
-}
 
-//<form method="POST" action="index.php?action=publier-touite">
-//    <h2>Publier un touite</h2>
-//    <textarea name="message" maxlength="235"></textarea>
-//    <button type="submit">Publier</button>
-//</form>
-//
-//<form method="POST" action="index.php?action=abonner-tag">
-//    <h2>S abonner à un tag</h2>
-//    <input type="text" name="idTag" value="123456">
-//    <button type="submit">S abonner</button>
-//</form>
+} else {
 
+    // Page de connexion
+    echo '
+    <h1>Connexion à Touiteur</h1>
+
+    <form method="POST" action="index.php?action=login">
+        <label for="pseudo">Pseudo :</label>
+        <input type="text" name="pseudo" id="pseudo" required>
+        <button type="submit">Se connecter</button>
+    </form>
+    ';
+}

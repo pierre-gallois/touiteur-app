@@ -31,7 +31,7 @@ class RendererTouite {
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
         $html .= "</article>";
-        $html .= "<a href='index.php?action=detail&id=$id'>Voir tout le touite</a>";
+        $html .= "<a href='/public/index.php?action=detail&id=$id'>Voir tout le touite</a>";
 
         return $html;
     }
