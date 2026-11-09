@@ -6,6 +6,7 @@ use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\action\ActionAbonnerTag;
 use iutnc\touiteur\action\ActionPublierTouite;
+use iutnc\touiteur\action\ConnexionAction;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
@@ -39,6 +40,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'login') {
 
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
+    ->addRoute('login', ConnexionAction::class)
     ->addRoute('abonner-tag', ActionAbonnerTag::class)
     ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
