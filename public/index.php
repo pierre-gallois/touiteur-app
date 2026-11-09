@@ -59,14 +59,28 @@ if (!empty($_SESSION['utilisateur'])) {
 
 } else {
 
-    // Page de connexion
+    // Affichage de la page de connexion
     echo '
-    <h1>Connexion à Touiteur</h1>
+    <h1>Bienvenue sur Touiteur</h1>
+
+    <h2>Connexion</h2>
 
     <form method="POST" action="index.php?action=login">
+
         <label for="pseudo">Pseudo :</label>
         <input type="text" name="pseudo" id="pseudo" required>
+
+        <label for="nom">Nom :</label>
+        <input type="text" name="nom" id="nom">
+
+        <label for="prenom">Prénom :</label>
+        <input type="text" name="prenom" id="prenom">
+
+        <label for="email">Email :</label>
+        <input type="email" name="email" id="email">
+
         <button type="submit">Se connecter</button>
+
     </form>
     ';
 }
