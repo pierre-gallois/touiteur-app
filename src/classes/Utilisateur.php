@@ -84,6 +84,21 @@ class Utilisateur {
     {
         $this->tagsSuivis[] = $tag;
     }
+
+    /**
+     * Méthode permettant de connecter un utilisateur.
+     * @return void
+     */
+    public function connecter(): void
+    {
+        // Démarrer la session si elle n'est pas déjà active
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Enregistrer le pseudo dans la session
+        $_SESSION['pseudo'] = $this->pseudo;
+    }
 }
 
 ?>
