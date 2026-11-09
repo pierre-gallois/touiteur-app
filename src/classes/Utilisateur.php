@@ -87,17 +87,30 @@ class Utilisateur {
 
     /**
      * Méthode permettant de connecter un utilisateur.
-     * @return void
+     * @return bool true si la connexion réussit, false sinon.
      */
-    public function connecter(): void
+    public function connecter(): bool
     {
+        // Récupérer le repository
+        $repo = \iutnc\touiteur\repository\RepoDev::getInstance();
+
+        // Vérifier si le pseudo existe
+        $utilisateurs = $repo->getUtilisateurs();
+
+        if (!array_key_exists($this->pseudo, $utilisateurs)) {
+            return false;
+        }
+
         // Démarrer la session si elle n'est pas déjà active
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
         // Enregistrer le pseudo dans la session
+        session_regenerate_id(true);
         $_SESSION['pseudo'] = $this->pseudo;
+
+        return true;
     }
 }
 
