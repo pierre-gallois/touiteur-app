@@ -21,23 +21,6 @@ session_start();
 $repo = RepoDev::getInstance();
 $repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
-// Gestion de la connexion
-if (isset($_GET['action']) && $_GET['action'] === 'login') {
-
-    $pseudo = $_POST['pseudo'] ?? '';
-
-    try {
-        $utilisateur = $repo->getUtilisateur($pseudo);
-        $_SESSION['utilisateur'] = $utilisateur->pseudo;
-
-        header('Location: index.php');
-        exit();
-
-    } catch (\InvalidArgumentException $e) {
-        // Utilisateur introuvable
-    }
-}
-
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
     ->addRoute('login', ConnexionAction::class)
@@ -49,10 +32,10 @@ $dispatcher = (new Dispatcher())
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
 
-// Vérifie si l'utilisateur est connecté
-if (!empty($_SESSION['utilisateur'])) {
 
-    // Exécution de l'action
+// Vérifie si l'utilisateur est connecté ou s'il tente de se connecter
+if (($_GET['action'] ?? '') === 'login' || !empty($_SESSION['utilisateur'])) {
+
     try {
         echo $dispatcher->run();
     } catch (DispatcherException $e) {
@@ -83,6 +66,6 @@ if (!empty($_SESSION['utilisateur'])) {
 
         <button type="submit">Se connecter</button>
 
-    </form>
-    ';
+    </form>';
 }
+

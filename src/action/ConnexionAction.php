@@ -49,7 +49,7 @@ class ConnexionAction extends Action
         $utilisateur->connecter();
 
         // Redirection vers l'accueil
-        header('Location: index.php');
+        header('Location: index.php?action=touites');
         exit();
     }
 }
