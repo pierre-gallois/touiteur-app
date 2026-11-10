@@ -2,6 +2,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use iutnc\touiteur\action\AfficherListeUtilisateursAction;
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\action\ActionAbonnerTag;
@@ -17,26 +18,11 @@ use iutnc\touiteur\repository\RepoDev;
 // Démarrage de la session
 session_start();
 
+
 // Chargement des données
 $repo = RepoDev::getInstance();
 $repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
-// Gestion de la connexion
-if (isset($_GET['action']) && $_GET['action'] === 'login') {
-
-    $pseudo = $_POST['pseudo'] ?? '';
-
-    try {
-        $utilisateur = $repo->getUtilisateur($pseudo);
-        $_SESSION['utilisateur'] = $utilisateur->pseudo;
-
-        header('Location: index.php');
-        exit();
-
-    } catch (\InvalidArgumentException $e) {
-        // Utilisateur introuvable
-    }
-}
 
 // Création Dispatcher
 $dispatcher = (new Dispatcher())
@@ -45,12 +31,14 @@ $dispatcher = (new Dispatcher())
     ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
+    ->addRoute('liste-utilisateurs', AfficherListeUtilisateursAction::class)
     ->addRoute('touites', AfficherListeTouiteAction::class)
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);
-
+// Action demandée
+$action = $_GET['action'] ?? 'default';
 // Vérifie si l'utilisateur est connecté
-if (!empty($_SESSION['utilisateur'])) {
+if (!empty($_SESSION['utilisateur'])|| $action === "login") {
 
     // Exécution de l'action
     try {

@@ -18,7 +18,7 @@ class ConnexionAction extends Action
 
         // Vérification du pseudo
         if ($pseudo === '') {
-            return '';
+            return '<p>Veuillez saisir un pseudo.</p>';
         }
 
         // Récupération du repository
@@ -33,6 +33,10 @@ class ConnexionAction extends Action
             // Si l'utilisateur n'existe pas
             if ($nom === '' || $prenom === '' || $email === '') {
                 return '';
+            }
+            // Vérification de l'adresse email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return "<p>Adresse email invalide.</p>";
             }
 
             // Création du profil
