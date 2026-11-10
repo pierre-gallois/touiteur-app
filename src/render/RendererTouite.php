@@ -31,7 +31,7 @@ class RendererTouite {
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
         $html .= "</article>";
-        $html .= "<a href='/public/index.php?action=detail&id=$id'>Voir tout le touite</a>";
+        $html .= "<a href='/public/index.php?touite-detail&id={$touite->id}'>Voir tout le touite</a>"; // on prend bien celui du Dispatcher dans l'index
 
         return $html;
     }
@@ -180,5 +180,11 @@ class RendererTouite {
         }
         // on retourne la liste filtrée affichée sous forme de HTML grâce au renderer
         return self::afficherListeTouite($ListeTouitesMur);
+    }
+
+    public static function evaluationTouite(Touite $touite) : void
+    {
+
+        // en cours
     }
 }
