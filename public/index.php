@@ -2,6 +2,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use iutnc\touiteur\action\AfficherListeUtilisateursAction;
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\action\ActionAbonnerTag;
@@ -30,6 +31,7 @@ $dispatcher = (new Dispatcher())
     ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
+    ->addRoute('liste-utilisateurs', AfficherListeUtilisateursAction::class)
     ->addRoute('touites', AfficherListeTouiteAction::class)
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('default', DefaultAction::class);

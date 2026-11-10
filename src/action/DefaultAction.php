@@ -21,7 +21,7 @@ class DefaultAction extends Action{
 <h1>Bienvenue sur Touiteur</h1>
 <ul>
 <li><a href="index.php?action=publier-touite">Publier un touite</a></li>
-<li><a href="index.php?action=touites-utilisateur">Afficher un touite d'un utilisateur</a></li>
+<li><a href="index.php?action=liste-utilisateurs">Afficher les touites d'un utilisateur</a></li>
 <li><a href="index.php?action=touites">Liste des touites</a></li>
 <li><a href="index.php?action=show-influenceurs">Voir la liste des influenceurs</a></li>
 </ul>

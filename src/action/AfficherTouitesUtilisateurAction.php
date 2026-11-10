@@ -15,21 +15,15 @@ class AfficherTouitesUtilisateurAction extends Action {
         // Récupère le pseudo de l'utilisateur depuis l'URL
         $pseudo = $_GET['pseudo'] ?? '';
 
-        // Récupère la liste des utilisateurs
-        $listeUtilisateurs = $repo->getUtilisateurs();
+        // Recherche de l'utilisateur
+        try {
+            $utilisateur = $repo->getUtilisateur($pseudo);
 
-        // Parcourt la liste des utilisateurs
-        foreach ($listeUtilisateurs as $utilisateur) {
+            // Affichage des touites de l'utilisateur
+            return RendererTouite::aff_touite_utilisateur($utilisateur);
 
-            // Vérifie si le pseudo correspond à celui recherché
-            if ($utilisateur->pseudo === $pseudo) {
-
-                // Demande au Renderer d'afficher les touites
-                return RendererTouite::aff_touite_utilisateur($utilisateur);
-            }
+        } catch (\InvalidArgumentException $e) {
+            return '<p>Utilisateur introuvable.</p>';
         }
-
-        // Retourne un message si aucun utilisateur n'a été trouvé
-        return '<p>Utilisateur introuvable.</p>';
     }
 }
