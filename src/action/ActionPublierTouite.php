@@ -10,8 +10,7 @@ use iutnc\touiteur\repository\RepoDev;
 /**
  * Classe PublierTouiteAction qui permet l'intéraction avec l'utilisateur de publier un touite
  */
-class ActionPublierTouite extends Action
-{
+class ActionPublierTouite extends Action {
 
     /**
      * Méthode publierTouite qui publie un touite d'un utilisateur
@@ -51,7 +50,7 @@ class ActionPublierTouite extends Action
 
                 // On enregistre le touite dans la base de donnée
                 $repo = RepoDev::getInstance();
-                $repo->stocker($touite);
+                $utilisateur = $repo->getUtilisateur($_SESSION['utilisateur']);
 
                 // rendu html
                 $html .= "<p>Touite publié !</p>";

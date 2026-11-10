@@ -2,7 +2,7 @@
 
 namespace iutnc\touiteur\action;
 
-class DefaultAction extends Action{
+class DefaultAction extends Action {
     /**
      * Constructeur de DefaultAction
      */
@@ -18,14 +18,21 @@ class DefaultAction extends Action{
     public function execute() : string
     {
         return <<<HTML
-<h1>Bienvenue sur Touiteur</h1>
-<ul>
-<li><a href="index.php?action=publier-touite">Publier un touite</a></li>
-<li><a href="index.php?action=touites-utilisateur">Afficher un touite d'un utilisateur</a></li>
-<li><a href="index.php?action=touites">Liste des touites</a></li>
-<li><a href="index.php?action=show-influenceurs">Voir la liste des influenceurs</a></li>
-</ul>
-HTML;
+        <h1>Bienvenue sur Touiteur</h1>
+        <ul>
+        <li><a href="index.php?action=publier-touite">Publier un touite</a></li>
+        <li><a href="index.php?action=touites-utilisateur">Afficher un touite d'un utilisateur</a></li>
+        <li><a href="index.php?action=touites">Liste des touites</a></li>
+        <li><a href="index.php?action=show-influenceurs">Voir la liste des influenceurs</a></li>
+        </ul>
+        <!-- a voir comment faire / verifier
+        <form method="POST" action="index.php?action=abonner-tag">
+            <label for="libelleTag">S'abonner à un tag :</label>
+            <input type="text" name="libelleTag" id="libelleTag" placeholder="#bug" required>
+            <button type="submit">S'abonner</button>
+        </form>
+        -->
 
+        HTML;
     }
 }
