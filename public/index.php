@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -29,7 +28,7 @@ $dispatcher = (new Dispatcher())
     ->addRoute('login', ConnexionAction::class)
     ->addRoute('abonner-tag', ActionAbonnerTag::class)
     ->addRoute('publier-touite', ActionPublierTouite::class)
-    ->addRoute('touite-detail', AfficherTouiteDetailAction::class)
+    ->addRoute('detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
     ->addRoute('liste-utilisateurs', AfficherListeUtilisateursAction::class)
     ->addRoute('touites', AfficherListeTouiteAction::class)
