@@ -17,19 +17,26 @@ class ActionPublierTouite extends Action {
      * @return string un code html affichant le touite en détail pour montrer qu'il a bien été posté
      * @throws LengthTouiteException si le touite dépasse 235 caractères
      */
-    public function execute(): string
-    {
-        // On vérifie que l'utilisateur est bien dans une session
-        if (!isset($_SESSION['utilisateur'])) {
-            return "<p>Erreur : vous devez être connecté pour publier un touite.</p>";
-        }
-        // On récupère l'utilisateur
-        $utilisateur = $_SESSION['utilisateur'];
+   public function execute(): string
+   {
+       // Vérifier que l'utilisateur est connecté
+       if (!isset($_SESSION['utilisateur_obj'])) {
+           return "<p>Erreur : vous devez être connecté.</p>";
+       }
 
-        // Structure html
-        $html = "<h1>Publier un touite</h1>";
+       // Récupérer l'objet Utilisateur depuis la session
+       $utilisateur = $_SESSION['utilisateur_obj'];
 
-        $touite = null;
+       // Récupérer le repository
+       $repo = RepoDev::getInstance();
+
+       // Réenregistrer l'utilisateur dans le repository
+       $repo->stocker($utilisateur);
+
+       // Structure HTML
+       $html = "<h1>Publier un touite</h1>";
+
+       $touite = null;
         // On regarde si le formulaire a bien été envoyé
         if ($this->http_method === 'POST') {
             $message = $_POST['message'];
@@ -47,10 +54,6 @@ class ActionPublierTouite extends Action {
 
                 // Ajout du touite à l'utilisateur
                 $utilisateur->ajouterTouite($touite);
-
-                // On enregistre le touite dans la base de donnée
-                $repo = RepoDev::getInstance();
-                $utilisateur = $repo->getUtilisateur($_SESSION['utilisateur']);
 
                 // rendu html
                 $html .= "<p>Touite publié !</p>";
