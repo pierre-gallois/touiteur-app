@@ -5,6 +5,7 @@ namespace iutnc\touiteur\classes;
 use iutnc\touiteur\exception\LengthTouiteException;
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\exception\InvalidPropertyException;
+use iutnc\touiteur\classes\Tag;
 
 /**
  * Classe représentant un touite
