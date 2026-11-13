@@ -54,8 +54,11 @@ class ActionPublierTouite extends Action {
 
                 // Ajout du touite à l'utilisateur
                 $utilisateur->ajouterTouite($touite);
+                // Enregistrement du touite dans RepoDev
+                    $repo->stocker($touite);
 
-                // rendu html
+
+                    // rendu html
                 $html .= "<p>Touite publié !</p>";
                 } catch (LengthTouiteException $e) {
                     $html .= "<p>{$e->getMessage()}</p>";
