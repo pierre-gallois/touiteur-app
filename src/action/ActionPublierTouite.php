@@ -40,6 +40,7 @@ class ActionPublierTouite extends Action {
             $message = trim($_POST['message'] ?? '');
             $imagePath = null;
             $erreurImage = null;
+            $descriptionImage = trim($_POST['descriptionImage'] ?? '');
 
             // Vérifier si une image a été envoyée
             if (isset($_FILES['image']) &&
@@ -106,14 +107,25 @@ class ActionPublierTouite extends Action {
                 $html .= "<p>$erreurImage</p>";
             }
 
+            // La description de l'image fait 255 caractères maximum (taille de la colonne dans la base)
+            elseif (mb_strlen($descriptionImage) > 255) {
+                $html .= "<p>La description de l'image doit faire 255 caractères maximum.</p>";
+            }
+
             else {
                 // Création du touite
                 try {
+                    // pas de description si elle est vide
+                    if ($descriptionImage === '') {
+                        $descriptionImage = null;
+                    }
+
                     $touite = new Touite(
                         $message,
                         $utilisateur,
                         date('Y-m-d H:i:s'),
-                        $imagePath
+                        $imagePath,
+                        $descriptionImage
                     );
 
                     // Ajout du touite à l'utilisateur
@@ -151,6 +163,13 @@ class ActionPublierTouite extends Action {
                    name="image"
                    id="image"
                    accept="image/jpeg,image/png,image/webp,image/gif">
+
+            <label for="descriptionImage">Description de l'image :</label>
+            <input type="text"
+                   name="descriptionImage"
+                   id="descriptionImage"
+                   maxlength="255"
+                   placeholder="Ex : ma nouvelle voiture #Edison">
 
             <br><br>
 

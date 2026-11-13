@@ -604,6 +604,35 @@ main > p + a {
 }
 main > p + a:hover { background: var(--rose); }
 
+/* Bouton "Accueil" en haut des pages */
+.bouton-accueil {
+    display: inline-block;
+    margin: 0 0 22px;
+    padding: 7px 16px;
+    font-weight: 700;
+    text-decoration: none;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: 999px;
+    box-shadow: var(--ombre-petite);
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.bouton-accueil::before { content: "← "; }
+.bouton-accueil:hover {
+    background: var(--jaune);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--encre);
+}
+.bouton-accueil + h1 { display: table; }
+
+/* Description sous l'image d'un touite */
+article > p.description-image {
+    margin: 4px 0 0;
+    font-size: .9rem;
+    font-style: italic;
+    font-weight: 500;
+}
+
 /* ---------- Liens automatiques (sans classe) ---------- */
 a[href*="tag="],
 .tag {

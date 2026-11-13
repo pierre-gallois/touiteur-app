@@ -18,6 +18,7 @@ class Touite {
     private array $tags = []; // Liste vide avec par défaut 0 tag
     private int $id;
     private ?string $image = null; // Chemin de l'image du touite
+    private ?string $descriptionImage = null; // Description de l'image du touite
     private int $note = 0; // La note du touite (+1 pour un like, -1 pour un dislike)
     private array $votants = []; // Les pseudos des utilisateurs qui ont déjà noté le touite
     // Générateur d'id
@@ -31,7 +32,7 @@ class Touite {
      * @param string $date du touite
      * @throws LengthTouiteException si le message dépasse 235 caractères
      */
-    public function __construct(string $message, Utilisateur $auteur, string $date, ?string $image = null) {
+    public function __construct(string $message, Utilisateur $auteur, string $date, ?string $image = null, ?string $descriptionImage = null) {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
         if (mb_strlen($message, 'UTF-8') > 235) {
@@ -42,6 +43,7 @@ class Touite {
         $this->auteur = $auteur;
         $this->date = $date;
         $this->image = $image; // chemin de l'image (null si le touite n'a pas d'image)
+        $this->descriptionImage = $descriptionImage; // description de l'image (null si pas de description)
 
         // On extrait les tags valides du message de plus, les invalides sont ignorés
         $this->extraireTags();

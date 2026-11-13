@@ -71,6 +71,7 @@ echo <<<HTML
 </head>
 <body class="$classeBody">
     <main>
+        <a class='bouton-accueil' href='index.php'>Accueil</a>
         $contenu
     </main>
 </body>

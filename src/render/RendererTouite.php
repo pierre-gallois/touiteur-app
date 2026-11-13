@@ -91,7 +91,14 @@ class RendererTouite {
         // L'image du touite (seulement dans l'affichage détaillé, pas dans la liste)
         if ($touite->image !== null) {
             $image = filter_var($touite->image, FILTER_SANITIZE_SPECIAL_CHARS);
-            $html .= "<img src='" . $image . "' alt='Image du touite'>";
+            // la description alternatif de l'image (et s'affiche en dessous si il y en a une)
+            if ($touite->descriptionImage !== null && $touite->descriptionImage !== '') {
+                $description = filter_var($touite->descriptionImage, FILTER_SANITIZE_SPECIAL_CHARS);
+                $html .= "<img src='" . $image . "' alt='" . $description . "'>";
+                $html .= "<p class='description-image'>" . $description . "</p>";
+            } else {
+                $html .= "<img src='" . $image . "' alt='Image du touite'>";
+            }
         }
         $html .= "<div>" . $date . "</div>";
         // On ajoute la note du touite avec les 2 boutons pour le noter
