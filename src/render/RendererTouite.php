@@ -30,6 +30,10 @@ class RendererTouite {
         $html .= "<p>$pseudo</p>";
         $html .= "<p>$texteCourt</p>";
         $html .= "<p>$date</p>";
+        if ($touite->image !== null) {
+            $image = htmlspecialchars($touite->image, ENT_QUOTES, 'UTF-8');
+            $html .= '<img src="' . $image . '" alt="Image du touite" style="max-width: 300px;">';
+        }
         $html .= "</article>";
         $html .= "<a href='index.php?action=detail&id={$touite->id}'>Voir tout le touite</a>"; // on prend bien celui du Dispatcher dans l'index
 
@@ -98,6 +102,12 @@ class RendererTouite {
         $html .= "</form>";
         $html .= "</div>";
         $html .= "</article>";
+
+        if ($touite->image !== null) {
+            $html .= '<img src="' .
+                htmlspecialchars($touite->image, ENT_QUOTES, 'UTF-8') .
+                '" alt="Image du touite" style="max-width: 300px;">';
+        }
 
         return $html;
     }
