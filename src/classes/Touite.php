@@ -10,13 +10,15 @@ use iutnc\touiteur\classes\Tag;
 /**
  * Classe représentant un touite
  */
-class Touite {
+class Touite
+{
     // Attributs
     private string $message;      // Le contenu du touite
     private string $date;          // La date du touite
     private Utilisateur $auteur; // L'auteur du touite
     private array $tags = []; // Liste vide avec par défaut 0 tag
-    private int $id;
+    private int $id; // Id du touite
+    private int $idImage; // id de l'image associée au toutie
     // Générateur d'id
     private static int $increment = 0;
 
@@ -26,9 +28,12 @@ class Touite {
      * @param string $message le message du touite
      * @param Utilisateur $auteur du touite
      * @param string $date du touite
+     * @param int $idTouite du touite
+     * @param int $idImage de l'image associée au Touite
      * @throws LengthTouiteException si le message dépasse 235 caractères
      */
-    public function __construct(string $message, Utilisateur $auteur, string $date) {
+    public function __construct(string $message, Utilisateur $auteur, string $date, int $idTouite, int $idImage)
+    {
 
         // On vérifie que le message ne dépasse pas les 235 caractères
         if (mb_strlen($message, 'UTF-8') > 235) {
@@ -38,10 +43,12 @@ class Touite {
         }
         $this->auteur = $auteur;
         $this->date = $date;
+        $this->id = $idTouite;
+        $this->idImage = $idImage;
 
         // On extrait les tags valides du message de plus, les invalides sont ignorés
         $this->extraireTags();
-        $this->id = self::$increment++; // Associe un id & incremente pour le prochain.
+//        $this->id = self::$increment++; // Associe un id & incremente pour le prochain.
     }
 
     /**
@@ -50,7 +57,7 @@ class Touite {
      * @return mixed l'attribut passé en paramètre
      * @throws InvalidPropertyException est levée si l'attribut n'existe pas
      */
-    public function __get(string $name) : mixed
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -63,7 +70,7 @@ class Touite {
      * Methode extraiteTags qui extrait les tags du message
      * @return void
      */
-    private function extraireTags() : void
+    private function extraireTags(): void
     {
         //sélectionne tout les tags du message
         preg_match_all('/#([\p{L}\p{N}_]+)/u', $this->message, $trouver); // on stock les tags dans trouver[1] qui contient la liste des libellés sans le #
