@@ -20,12 +20,12 @@ class ActionPublierTouite extends Action {
    public function execute(): string
    {
        // Vérifier que l'utilisateur est connecté
-       if (!isset($_SESSION['utilisateur_obj'])) {
+       if (!isset($_SESSION['utilisateur'])) {
            return "<p>Erreur : vous devez être connecté.</p>";
        }
 
        // Récupérer l'objet Utilisateur depuis la session
-       $utilisateur = $_SESSION['utilisateur_obj'];
+       $utilisateur = $_SESSION['utilisateur'];
 
        // Récupérer le repository
        $repo = RepoDev::getInstance();
