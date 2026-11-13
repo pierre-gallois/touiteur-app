@@ -17,8 +17,13 @@ class ActionEvaluerTouite extends Action {
 
         // Récupération des identifiants
         $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo (meme chose que AbonnerTag)
-        $idTouite = $_POST['idTouite'] ?? '';
+        $idTouite = filter_input(INPUT_POST, 'idTouite', FILTER_VALIDATE_INT); // comme dans AfficherTouiteDetailAction
         $choix = $_POST['choix'] ?? '';
+
+        // Vérifie que l'id est valide (null si il manque, false si ce n'est pas un nombre)
+        if ($idTouite === null || $idTouite === false) {
+            return "<p>Ce touite n'existe pas</p>";
+        }
 
         // Récupération du touite
         try {

@@ -56,8 +56,6 @@ class ConnexionAction extends Action
         session_regenerate_id(true);
         $utilisateur->connecter();
         $_SESSION['utilisateur'] = $utilisateur;
-        // On vide les tags suivis de la session précédente (sinon un autre utilisateur les garderait)
-        $_SESSION['tagsSuivis'] = [];
 
         // Redirection après connexion pour éviter de renvoyer le formulaire.
         header('Location: index.php');

@@ -41,6 +41,7 @@ class Touite {
         }
         $this->auteur = $auteur;
         $this->date = $date;
+        $this->image = $image; // chemin de l'image (null si le touite n'a pas d'image)
 
         // On extrait les tags valides du message de plus, les invalides sont ignorés
         $this->extraireTags();
@@ -60,6 +61,34 @@ class Touite {
         } else {
             throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Touite.");
         }
+    }
+
+    /**
+     * Methode noter qui ajoute la note d'un utilisateur au touite
+     * @param string $pseudo de l'utilisateur qui note
+     * @param int $valeur de la note (+1 si approuvé, -1 si rejeté)
+     * @return bool true si la note a été ajoutée, false si l'utilisateur avait déjà noté le touite
+     */
+    public function noter(string $pseudo, int $valeur) : bool
+    {
+        $dejaNote = false; // par défaut l'utilisateur n'a pas encore fait de vote sur le touite
+
+        // on parcours tout les utilisateurs qui ont déjà noté le touite en question pour voir si il en fait partie ou nn
+        foreach ($this->votants as $votant) {
+            if ($votant === $pseudo) {
+                $dejaNote = true;
+            }
+        }
+
+        // l'utilisateur ne peut pas noter le meme touite plus d'une fois
+        if ($dejaNote) {
+            return false;
+        }
+
+        // On ajoute la note et on retient que cet utilisateur a noté (= il ne pourra plus le noter ce touite)
+        $this->note += $valeur;
+        $this->votants[] = $pseudo;
+        return true;
     }
 
     /**

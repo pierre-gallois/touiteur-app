@@ -21,14 +21,14 @@ class RendererTouite {
         $texteCourt = mb_strimwidth($touite->message, 0, 100, "...");
 
         // Pour la sécurité on passe tout par filter_var
-        $pseudo = filter_var($touite->auteur->pseudo, FILTER_SANITIZE_SPECIAL_CHARS);
         $date = filter_var($touite->date, FILTER_SANITIZE_SPECIAL_CHARS);
         $texteCourt = filter_var($texteCourt, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // On construit le html
         $html = "<article>";
-        $html .= "<p>$pseudo</p>";
+        $html .= "<p>" . self::lienAuteur($touite) . "</p>"; // on peut cliquer sur l'auteur pour voir ses touites
         $html .= "<p>$texteCourt</p>";
+        $html .= self::liensTags($touite); // on peut cliquer sur un tag pour voir les touites de ce tag
         $html .= "<p>$date</p>";
         $html .= "</article>";
         $html .= "<a href='index.php?action=detail&id={$touite->id}'>Voir tout le touite</a>"; // on prend bien celui du Dispatcher dans l'index
@@ -85,8 +85,9 @@ class RendererTouite {
 
         //Affichage du touite
         $html = "<article>";
-        $html .= "<h2>" . $pseudo . "</h2>";
+        $html .= "<h2>" . self::lienAuteur($touite) . "</h2>";
         $html .= "<p>" . $message . "</p>";
+        $html .= self::liensTags($touite);
         $html .= "<div>" . $date . "</div>";
         // On ajoute la note du touite avec les 2 boutons pour le noter
         $html .= "<div class='evaluation'>";
@@ -95,6 +96,10 @@ class RendererTouite {
         $html .= "<button type='submit' class='like' name='choix' value='approuve'>Approuvé</button>";
         $html .= "<span class='score'>" . $touite->note . "</span>";
         $html .= "<button type='submit' class='dislike' name='choix' value='rejete'>Rejeté</button>";
+        $html .= "</form>";
+        $html .= "<form method='POST' action='index.php?action=suivre-utilisateur'>";
+        $html .= "<input type='hidden' name='pseudo' value='" . $pseudo . "'>";
+        $html .= "<button type='submit' class='suivre'>Suivre " . $pseudo . "</button>";
         $html .= "</form>";
         $html .= "</div>";
         $html .= "</article>";
@@ -167,8 +172,10 @@ class RendererTouite {
             $AfficherSurLeMur = false;
 
             // si le touite fait partie des auteurs suivis par l'utilisateur
-            if (in_array($touite->auteur, $user->utilisateursSuivis)) {
-                $AfficherSurLeMur = true;
+            foreach ($user->utilisateursSuivis as $utilisateurSuivi) {
+                if ($touite->auteur->pseudo === $utilisateurSuivi->pseudo) {
+                    $AfficherSurLeMur = true;
+                }
             }
 
             // on recherche parmis les tag(s) du touite
@@ -191,9 +198,43 @@ class RendererTouite {
         return self::afficherListeTouite($ListeTouitesMur);
     }
 
-    public static function evaluationTouite(Touite $touite) : void
+    /**
+     * Méthode lienAuteur qui crée le lien vers les touites de l'auteur
+     * @param Touite $touite dont on veut l'auteur
+     * @return string le lien html vers les touites de l'auteur
+     */
+    public static function lienAuteur(Touite $touite) : string
     {
+        // Pour la sécurité on passe le pseudo par filter_var (et urlencode pour qu'il marche dans l'url)
+        $pseudo = filter_var($touite->auteur->pseudo, FILTER_SANITIZE_SPECIAL_CHARS);
+        $pseudoUrl = urlencode($touite->auteur->pseudo);
 
-        // en cours
+        return "<a href='index.php?action=touites-utilisateur&pseudo=" . $pseudoUrl . "'>" . $pseudo . "</a>";
     }
+
+
+    /**
+     * Méthode liensTags qui crée les liens vers les tags du touite (fonctionnalité 5)
+     * @param Touite $touite dont on veut les tags
+     * @return string un paragraphe avec un lien par tag (ou rien si le touite n'a pas de tag)
+     */
+    public static function liensTags(Touite $touite) : string
+    {
+        // si le touite n'a pas de tag on n'affiche rien
+        if (count($touite->tags) === 0) {
+            return "";
+        }
+
+        $html = "<p>";
+        // on fait un lien pour chaque tag du touite
+        foreach ($touite->tags as $tag) {
+            $libelle = filter_var($tag->libelleTag, FILTER_SANITIZE_SPECIAL_CHARS);
+            $libelleUrl = urlencode($tag->libelleTag);
+            $html .= "<a href='index.php?action=touites-tag&tag=" . $libelleUrl . "'>#" . $libelle . "</a> ";
+        }
+        $html .= "</p>";
+
+        return $html;
+    }
+
 }

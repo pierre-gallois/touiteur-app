@@ -2,23 +2,23 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use iutnc\touiteur\action\AbonnerTag;
-use iutnc\touiteur\action\PublierTouite;
+use iutnc\touiteur\action\ActionAbonnerTag;
+use iutnc\touiteur\action\ActionPublierTouite;
+use iutnc\touiteur\action\ActionEvaluerTouite;
+use iutnc\touiteur\action\ActionSuivreUtilisateur;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherListeUtilisateursAction;
+use iutnc\touiteur\action\AfficherMurAction;
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
+use iutnc\touiteur\action\AfficherTouitesTagAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\action\ConnexionAction;
 use iutnc\touiteur\action\DefaultAction;
+use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
-use iutnc\touiteur\action\AfficherListeTouiteAction;
-use iutnc\touiteur\action\AfficherInfluenceurAction;
-use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\repository\RepoDev;
-use iutnc\touiteur\action\ActionEvaluerTouite;
-use iutnc\touiteur\action\AfficherMurAction;
 
 // La session doit être démarrée avant toute lecture/écriture de $_SESSION.
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -29,10 +29,13 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $repo = RepoDev::getInstance();
 $repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
+// L'utilisateur est connecté si on a bien un objet Utilisateur dans la session (cf. ConnexionAction)
+$connecte = isset($_SESSION['utilisateur']) && $_SESSION['utilisateur'] instanceof Utilisateur;
+
 // Après chaque requête, RepoDev est reconstruit.
 // On réinjecte donc l'utilisateur connecté conservé dans la session.
-if (isset($_SESSION['utilisateur_obj'])) {
-    $repo->stocker($_SESSION['utilisateur_obj']);
+if ($connecte) {
+    $repo->stocker($_SESSION['utilisateur']);
 }
 
 $dispatcher = (new Dispatcher())
@@ -46,22 +49,23 @@ $dispatcher = (new Dispatcher())
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('evaluer-touite', ActionEvaluerTouite::class)
     ->addRoute('mur', AfficherMurAction::class)
+    ->addRoute('touites-tag', AfficherTouitesTagAction::class)
+    ->addRoute('suivre-utilisateur', ActionSuivreUtilisateur::class)
     ->addRoute('default', DefaultAction::class);
 
 $action = $_GET['action'] ?? 'default';
-$estConnecte = isset($_SESSION['utilisateur_obj']) && $_SESSION['utilisateur_obj'] instanceof \iutnc\touiteur\classes\Utilisateur;
 
-// Un visiteur non connecté ne peut accéder qu'au formulaire de connexion.
-if (!$estConnecte && $action !== 'login') {
-    echo (new ConnexionAction())->execute();
-    exit;
-}
-
-try {
-    echo $dispatcher->run();
-} catch (DispatcherException $e) {
-    http_response_code(404);
-    echo '<p>Page introuvable.</p>';
+// Le contenu est calculé AVANT tout affichage (sinon header() de ConnexionAction ne marcherait plus)
+if (!$connecte && $action !== 'login') {
+    // Un visiteur non connecté ne peut accéder qu'au formulaire de connexion.
+    $contenu = (new ConnexionAction())->execute();
+} else {
+    try {
+        $contenu = $dispatcher->run();
+    } catch (DispatcherException $e) {
+        http_response_code(404);
+        $contenu = '<p>Page introuvable.</p>';
+    }
 }
 
 // permet d'avoir un bon affichage css : squelette HTML minimal qui charge la feuille de style
