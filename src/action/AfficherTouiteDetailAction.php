@@ -16,7 +16,7 @@ class AfficherTouiteDetailAction extends Action {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
         // Vérifie que l'id est valide
-        if ($id === null) {
+        if ($id === null || $id === false) {
             return '<p>Touite introuvable.</p>';
         }
         // Récupère la liste des touites
