@@ -1,0 +1,744 @@
+/* ==========================================================================
+   Touiteur.app — thème "Touiteur Corp" (néo-brutalisme)
+   --------------------------------------------------------------------------
+   Fond papier, gros contours noirs, ombres dures décalées, couleurs flashy,
+   cartes posées de travers comme des stickers.
+   Le HTML des renderers n'a pas de classes : la feuille cible la structure
+   (article, article + a, main > ul ...). Classes optionnelles pour les
+   fonctionnalités à venir en fin de fichier.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap");
+
+/* ---------- Thème ---------- */
+:root {
+    --papier: #fff3d6;
+    --encre: #111111;
+    --blanc: #ffffff;
+    --jaune: #ffd426;
+    --rose: #ff5fa8;
+    --bleu: #4d6bff;
+    --menthe: #2fe0a5;
+    --orange: #ff8a3d;
+    --lilas: #b69cff;
+    --rouge: #ff4747;
+    --trait: 3px solid var(--encre);
+    --ombre: 6px 6px 0 var(--encre);
+    --ombre-petite: 4px 4px 0 var(--encre);
+    --ombre-grosse: 10px 10px 0 var(--encre);
+    --rayon: 14px;
+    --largeur: 680px;
+    --titre: "Archivo Black", "Arial Black", Impact, sans-serif;
+    --police: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --mono: "Space Mono", Consolas, "Courier New", monospace;
+    color-scheme: light;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--police);
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--encre);
+    background-color: var(--papier);
+    background-image: radial-gradient(rgba(17, 17, 17, .13) 1.2px, transparent 1.3px);
+    background-size: 22px 22px;
+}
+
+a { color: var(--encre); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { background: var(--jaune); }
+
+:focus-visible { outline: 3px dashed var(--bleu); outline-offset: 3px; }
+
+::selection { background: var(--rose); color: var(--encre); }
+
+/* ---------- Contenu principal ---------- */
+main {
+    flex: 1;
+    width: 100%;
+    max-width: var(--largeur);
+    margin: 0 auto;
+    padding: 34px 16px 60px;
+}
+
+main h1 {
+    display: inline-block;
+    margin: 0 0 26px;
+    padding: 4px 14px;
+    font-family: var(--titre);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    background: var(--jaune);
+    border: var(--trait);
+    box-shadow: var(--ombre);
+    transform: rotate(-1.5deg);
+}
+main h1 ~ h1 {
+    margin-top: 44px;
+    font-size: 1.5rem;
+    background: var(--menthe);
+    transform: rotate(1deg);
+}
+
+main h2 { font-family: var(--titre); font-weight: 400; letter-spacing: -.01em; }
+
+/* Messages simples renvoyés par les actions */
+main > p {
+    margin: 0 0 20px;
+    padding: 12px 16px 12px 48px;
+    position: relative;
+    font-weight: 700;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre-petite);
+}
+main > p::before {
+    content: "!";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+    display: grid;
+    place-items: center;
+    font-family: var(--titre);
+    font-size: .8rem;
+    background: var(--orange);
+    border: 2px solid var(--encre);
+    border-radius: 50%;
+}
+
+/* ---------- Touites (liste) ---------- */
+/* <div><article><p>pseudo</p><p>texte</p><p>date</p></article><a>Voir tout</a>...</div> */
+article {
+    --fond: var(--blanc);
+    --pastille: var(--rose);
+    --penche: -.8deg;
+    position: relative;
+    margin: 0 0 26px;
+    padding: 18px 20px 16px 82px;
+    background: var(--fond);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    transform: rotate(var(--penche));
+    transition: transform .18s ease, box-shadow .18s ease;
+    animation: tombe .45s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+
+/* Couleurs qui tournent d'une carte à l'autre (articles = 1 enfant sur 2) */
+article:nth-of-type(4n+1) { --pastille: var(--rose);   --penche: -.8deg; }
+article:nth-of-type(4n+2) { --pastille: var(--bleu);   --penche: .7deg; }
+article:nth-of-type(4n+3) { --pastille: var(--menthe); --penche: -.4deg; }
+article:nth-of-type(4n+4) { --pastille: var(--orange); --penche: .9deg; }
+article:nth-of-type(2) { animation-delay: .05s; }
+article:nth-of-type(3) { animation-delay: .1s; }
+article:nth-of-type(4) { animation-delay: .15s; }
+article:nth-of-type(n+5) { animation-delay: .2s; }
+
+/* Avatar carré façon sticker */
+article::before {
+    content: "";
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 46px;
+    height: 46px;
+    background:
+        radial-gradient(circle at 35% 40%, var(--encre) 3px, transparent 3.5px),
+        radial-gradient(circle at 65% 40%, var(--encre) 3px, transparent 3.5px),
+        radial-gradient(ellipse 9px 5px at 50% 68%, var(--encre) 70%, transparent 75%),
+        var(--pastille);
+    border: var(--trait);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 var(--encre);
+}
+
+article p { margin: 0; }
+
+/* auteur */
+article > p:first-child,
+article > h2:first-child {
+    margin: 0 0 6px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: .95rem;
+}
+article > p:first-child::before,
+article > h2:first-child::before { content: "@"; color: var(--pastille); -webkit-text-stroke: .5px var(--encre); }
+article > p:first-child::after,
+article > h2:first-child::after {
+    content: "✔";
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    vertical-align: 1px;
+    font-size: .7rem;
+    background: var(--bleu);
+    color: var(--blanc);
+    border: 2px solid var(--encre);
+    border-radius: 50%;
+}
+
+/* texte */
+article > p:nth-child(2) {
+    font-size: 1.08rem;
+    font-weight: 500;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* date */
+article > p:last-child:not(:first-child),
+article > div:last-child {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: .75rem;
+    font-weight: 700;
+    background: var(--papier);
+    border: 2px solid var(--encre);
+    border-radius: 6px;
+}
+article > p:last-child:not(:first-child)::before,
+article > div:last-child::before { content: "📅 "; }
+
+/* Carte + lien "Voir tout le touite" : le lien devient un bouton accroché */
+article:has(+ a) { margin-bottom: 0; }
+
+article + a {
+    position: relative;
+    z-index: 1;
+    display: table;
+    margin: -16px 22px 30px auto;
+    padding: 6px 14px;
+    font-weight: 700;
+    font-size: .85rem;
+    text-decoration: none;
+    background: var(--jaune);
+    border: var(--trait);
+    border-radius: 999px;
+    box-shadow: 3px 3px 0 var(--encre);
+    transform: rotate(2deg);
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    animation: tombe .45s .2s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+article + a::after { content: " →"; }
+article + a:hover {
+    background: var(--rose);
+    transform: rotate(0) translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--encre);
+}
+
+article:hover,
+article:has(+ a:hover) {
+    transform: rotate(0) translate(-3px, -3px);
+    box-shadow: var(--ombre-grosse);
+}
+
+/* ---------- Touite en détail ---------- */
+/* <article><h2>pseudo</h2><p>message</p><div>date</div></article> */
+article:has(> h2) {
+    --pastille: var(--rose);
+    --penche: -1deg;
+    padding: 30px 30px 26px 100px;
+    background: var(--blanc);
+}
+article:has(> h2)::before { width: 60px; height: 60px; left: 22px; top: 26px; }
+article:has(> h2)::after {
+    content: "”";
+    position: absolute;
+    right: 18px;
+    top: -30px;
+    font-family: var(--titre);
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--jaune);
+    -webkit-text-stroke: 3px var(--encre);
+    pointer-events: none;
+}
+article:has(> h2) > h2 { font-size: 1.05rem; }
+article:has(> h2) > p {
+    margin: 8px 0 4px;
+    font-size: clamp(1.25rem, 3.4vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Formulaires ---------- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 28px;
+    padding: 24px;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+}
+form br { display: none; }
+
+label {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font: inherit;
+    font-weight: 500;
+    color: var(--encre);
+    background: var(--papier);
+    border: var(--trait);
+    border-radius: 10px;
+    transition: box-shadow .12s ease, transform .12s ease, background .12s ease;
+}
+
+textarea { min-height: 140px; resize: vertical; font-size: 1.1rem; }
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    background: var(--blanc);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--bleu);
+}
+
+::placeholder { color: rgba(17, 17, 17, .45); }
+
+button,
+input[type="submit"],
+input[type="button"],
+.bouton {
+    align-self: flex-end;
+    margin-top: 12px;
+    padding: 12px 28px;
+    font-family: var(--titre);
+    font-size: 1rem;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--encre);
+    background: var(--rose);
+    border: var(--trait);
+    border-radius: 12px;
+    box-shadow: var(--ombre-petite);
+    cursor: pointer;
+    transition: transform .1s ease, box-shadow .1s ease, background .1s ease;
+}
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.bouton:hover {
+    background: var(--jaune);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--encre);
+}
+button:active,
+input[type="submit"]:active,
+.bouton:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--encre);
+}
+
+/* ---------- Page de connexion ---------- */
+.page-connexion main {
+    max-width: 460px;
+    padding-top: 7vh;
+    text-align: center;
+}
+.page-connexion main h1 {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    background: var(--jaune);
+}
+.page-connexion main h2 {
+    position: relative;
+    display: inline-block;
+    margin: -6px 0 24px 12px;
+    padding: 3px 12px;
+    font-size: 1rem;
+    background: var(--menthe);
+    border: var(--trait);
+    transform: rotate(3deg);
+}
+.page-connexion form { text-align: left; padding: 28px; transform: rotate(.5deg); }
+.page-connexion form::before {
+    content: "BÊTA · garanti avec des #bug";
+    align-self: flex-start;
+    margin: -44px 0 6px -10px;
+    padding: 3px 10px;
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 700;
+    background: var(--orange);
+    border: var(--trait);
+    transform: rotate(-4deg);
+}
+.page-connexion button { align-self: stretch; }
+
+/* ---------- Accueil : menu en tuiles ---------- */
+main > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 22px;
+}
+main > ul > li:nth-child(1) > a { --tuile: var(--rose);   transform: rotate(-1.2deg); }
+main > ul > li:nth-child(2) > a { --tuile: var(--menthe); transform: rotate(1deg); }
+main > ul > li:nth-child(3) > a { --tuile: var(--bleu);   transform: rotate(.8deg); }
+main > ul > li:nth-child(4) > a { --tuile: var(--jaune);  transform: rotate(-1deg); }
+main > ul > li > a {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+    padding: 20px;
+    font-family: var(--titre);
+    font-size: 1.15rem;
+    line-height: 1.2;
+    text-decoration: none;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+main > ul > li > a::before {
+    content: "✦";
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    background: var(--tuile);
+    border: var(--trait);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 var(--encre);
+}
+main > ul > li > a[href*="publier"]::before { content: "✍️"; }
+main > ul > li > a[href*="utilisateur"]::before { content: "👀"; }
+main > ul > li > a[href*="action=touites"]::before { content: "📣"; }
+main > ul > li > a[href*="influenceur"]::before { content: "💸"; }
+main > ul > li > a:hover {
+    background: var(--tuile);
+    transform: rotate(0) translate(-3px, -3px);
+    box-shadow: var(--ombre-grosse);
+}
+
+/* ---------- Liste des utilisateurs ---------- */
+/* <div><p><a>pseudo</a></p>...</div> */
+main > div:has(> p > a) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 18px;
+}
+main > div:has(> p > a) > p { margin: 0; }
+main > div:has(> p > a) > p:nth-child(4n+1) { --pastille: var(--rose); }
+main > div:has(> p > a) > p:nth-child(4n+2) { --pastille: var(--bleu); }
+main > div:has(> p > a) > p:nth-child(4n+3) { --pastille: var(--menthe); }
+main > div:has(> p > a) > p:nth-child(4n+4) { --pastille: var(--orange); }
+main > div:has(> p > a) > p > a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 14px 16px;
+    font-family: var(--mono);
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    overflow-wrap: anywhere;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+main > div:has(> p > a) > p:nth-child(odd) > a { transform: rotate(-1deg); }
+main > div:has(> p > a) > p:nth-child(even) > a { transform: rotate(1deg); }
+main > div:has(> p > a) > p > a::before {
+    content: "";
+    width: 64px;
+    height: 64px;
+    background:
+        radial-gradient(circle at 35% 40%, var(--encre) 4px, transparent 4.5px),
+        radial-gradient(circle at 65% 40%, var(--encre) 4px, transparent 4.5px),
+        radial-gradient(ellipse 12px 6px at 50% 68%, var(--encre) 70%, transparent 75%),
+        var(--pastille);
+    border: var(--trait);
+    border-radius: 16px;
+    box-shadow: 3px 3px 0 var(--encre);
+}
+main > div:has(> p > a) > p > a::after {
+    content: "voir ses touites →";
+    font-family: var(--police);
+    font-size: .75rem;
+    padding: 2px 10px;
+    background: var(--jaune);
+    border: 2px solid var(--encre);
+    border-radius: 999px;
+}
+main > div:has(> p > a) > p > a:hover {
+    background: var(--pastille);
+    transform: rotate(0) translate(-3px, -3px);
+    box-shadow: var(--ombre-grosse);
+}
+
+/* ---------- Influenceurs ---------- */
+/* <div><p>Liste des influenceurs :</p><ul><li>...</li></ul></div>  (ordre croissant -> le dernier est le roi) */
+main > div > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    overflow: hidden;
+    counter-reset: rang;
+}
+main > div > ul > li {
+    counter-increment: rang;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    font-weight: 700;
+    border-bottom: var(--trait);
+    transition: background .12s ease, padding .12s ease;
+}
+main > div > ul > li:last-child { border-bottom: 0; }
+main > div > ul > li::before {
+    content: counter(rang);
+    flex: none;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    font-family: var(--titre);
+    font-size: .95rem;
+    background: var(--menthe);
+    border: var(--trait);
+    border-radius: 10px;
+}
+main > div > ul > li:hover { background: var(--papier); padding-left: 26px; }
+main > div > ul > li:last-child {
+    font-size: 1.15rem;
+    background: var(--jaune);
+}
+main > div > ul > li:last-child::before { content: "👑"; background: var(--rose); font-size: 1.1rem; }
+main > div > ul > li:last-child::after {
+    content: "TOP INFLUENCEUR";
+    margin-left: auto;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: .68rem;
+    background: var(--encre);
+    color: var(--jaune);
+    border-radius: 6px;
+    transform: rotate(-3deg);
+}
+main > div:has(> ul) > p {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 2px 10px;
+    font-family: var(--mono);
+    font-size: .85rem;
+    font-weight: 700;
+    background: var(--lilas);
+    border: 2px solid var(--encre);
+}
+
+/* ---------- Liens automatiques (sans classe) ---------- */
+a[href*="tag="],
+.tag {
+    display: inline-block;
+    padding: 0 8px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: .9em;
+    text-decoration: none;
+    background: var(--menthe);
+    border: 2px solid var(--encre);
+    border-radius: 6px;
+    box-shadow: 2px 2px 0 var(--encre);
+}
+a[href*="tag="]:hover,
+.tag:hover { background: var(--jaune); }
+
+article a[href*="touites-utilisateur"] { text-decoration: none; }
+article a[href*="touites-utilisateur"]:hover { background: var(--jaune); }
+
+/* ==========================================================================
+   Classes optionnelles pour les fonctionnalités à venir
+   ========================================================================== */
+
+/* Image d'un touite (détail) : <img class="touite-image"> */
+/* Images de touites : <img class="touite-image" src="..." alt="..."> (ou toute <img> dans un article) */
+.touite-image,
+article img {
+    display: block;
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    margin: 16px 0 6px;
+    background: var(--papier);
+    border: var(--trait);
+    border-radius: 10px;
+    box-shadow: var(--ombre-petite);
+    transform: rotate(.6deg);
+    transition: transform .15s ease;
+}
+.touite-image:hover,
+article img:hover { transform: rotate(0) scale(1.01); }
+/* l'image peut aussi être entourée d'un lien vers l'original */
+article a:has(> img) { display: block; background: none; }
+
+/* Champ de choix d'image dans le formulaire de publication */
+input[type="file"] { padding: 10px; cursor: pointer; }
+input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 6px 14px;
+    font: inherit;
+    font-weight: 700;
+    background: var(--menthe);
+    border: var(--trait);
+    border-radius: 8px;
+    box-shadow: 2px 2px 0 var(--encre);
+    cursor: pointer;
+}
+input[type="file"]::file-selector-button:hover { background: var(--jaune); }
+
+/* Évaluation : <div class="evaluation"><button class="like">👍</button><span class="score">12</span><button class="dislike">👎</button></div> */
+.evaluation {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 4px;
+    background: var(--papier);
+    border: var(--trait);
+    border-radius: 999px;
+}
+.evaluation form { all: unset; display: contents; }
+.evaluation button,
+.like, .dislike {
+    align-self: auto;
+    margin: 0;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    font-family: var(--police);
+    font-size: 1.05rem;
+    border-radius: 50%;
+    box-shadow: 2px 2px 0 var(--encre);
+}
+.like { background: var(--menthe); }
+.dislike { background: var(--rouge); }
+.score {
+    min-width: 2.5ch;
+    text-align: center;
+    font-family: var(--titre);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Bouton secondaire (ex. "Suivre l'auteur") */
+.bouton { display: inline-block; }
+.bouton-secondaire { background: var(--blanc); }
+.bouton-secondaire:hover { background: var(--menthe); }
+
+/* Pagination : <nav class="pagination"><a>« Précédent</a><span>Page 2</span><a>Suivant »</a></nav> */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 30px 0;
+}
+.pagination a,
+.pagination span {
+    padding: 8px 16px;
+    font-weight: 700;
+    text-decoration: none;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--encre);
+}
+.pagination span { font-family: var(--mono); background: var(--jaune); }
+.pagination a:hover { background: var(--rose); }
+
+/* Alertes : <p class="alerte-succes"> / <p class="alerte-erreur"> */
+main > p.alerte-succes { background: var(--menthe); }
+main > p.alerte-succes::before { content: "✔"; background: var(--blanc); }
+main > p.alerte-erreur { background: var(--rouge); color: var(--blanc); }
+main > p.alerte-erreur::before { content: "✖"; background: var(--blanc); color: var(--encre); }
+
+/* Tableaux (back-office, tendances) */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--blanc);
+    border: var(--trait);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    overflow: hidden;
+}
+th, td { padding: 12px 16px; text-align: left; border-bottom: var(--trait); }
+th { font-family: var(--mono); font-size: .8rem; text-transform: uppercase; background: var(--jaune); }
+tr:last-child td { border-bottom: 0; }
+tbody tr:hover td { background: var(--papier); }
+
+/* ---------- Animations ---------- */
+@keyframes tombe {
+    from { opacity: 0; transform: translateY(-14px) rotate(calc(var(--penche, 0deg) * 4)); }
+    to   { opacity: 1; transform: rotate(var(--penche, 0deg)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+    :root { --ombre: 4px 4px 0 var(--encre); --ombre-grosse: 6px 6px 0 var(--encre); }
+    main { padding-top: 24px; }
+    article { padding: 16px 16px 14px 70px; }
+    article::before { left: 14px; top: 16px; width: 40px; height: 40px; }
+    article:has(> h2) { padding: 22px 18px 20px 84px; }
+    article:has(> h2)::before { width: 50px; height: 50px; left: 16px; top: 22px; }
+    article:has(> h2)::after { font-size: 5rem; top: -22px; }
+    form { padding: 18px; }
+    button, input[type="submit"] { align-self: stretch; }
+}
