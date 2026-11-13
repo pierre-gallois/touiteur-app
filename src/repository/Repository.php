@@ -14,7 +14,7 @@ abstract class Repository {
     private static ?self $instance = null;
 
     // Protégé : redéfini dans les enfants
-    private function __construct(){
+    protected function __construct(){
     }
 
 
