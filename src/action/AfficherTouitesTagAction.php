@@ -3,7 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 /**
  * Action qui affiche les touites associés à un tag accessible quand on clique sur un tag
@@ -12,7 +12,7 @@ class AfficherTouitesTagAction extends Action {
 
     public function execute(): string {
 
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupération du tag dans l'url
         $libelleTag = filter_input(INPUT_GET, 'tag'); // renvoie false si ce n'est pas un simple texte

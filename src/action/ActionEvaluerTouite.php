@@ -3,7 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 use \InvalidArgumentException;
 
 /**
@@ -13,7 +13,7 @@ class ActionEvaluerTouite extends Action {
 
     public function execute(): string {
 
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupération des identifiants
         $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo (meme chose que AbonnerTag)
@@ -33,10 +33,12 @@ class ActionEvaluerTouite extends Action {
         }
 
         // fonctionnement des note : approuvé = +1 et rejeté = -1 (on refuse le reste, au cas ou quelqu'un modifie le formulaire)
+        // la note est enregistrée dans la base de données
+        $utilisateur = $repo->getUtilisateur($pseudo);
         if ($choix === 'approuve') {
-            $noteAjoutee = $touite->noter($pseudo, 1);
+            $noteAjoutee = $repo->noterTouite($utilisateur, $touite, 1);
         } elseif ($choix === 'rejete') {
-            $noteAjoutee = $touite->noter($pseudo, -1);
+            $noteAjoutee = $repo->noterTouite($utilisateur, $touite, -1);
         } else {
             return "<p>Ce choix de note n'existe pas</p>";
         }

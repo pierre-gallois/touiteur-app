@@ -88,6 +88,11 @@ class RendererTouite {
         $html .= "<h2>" . self::lienAuteur($touite) . "</h2>";
         $html .= "<p>" . $message . "</p>";
         $html .= self::liensTags($touite);
+        // L'image du touite (seulement dans l'affichage détaillé, pas dans la liste)
+        if ($touite->image !== null) {
+            $image = filter_var($touite->image, FILTER_SANITIZE_SPECIAL_CHARS);
+            $html .= "<img src='" . $image . "' alt='Image du touite'>";
+        }
         $html .= "<div>" . $date . "</div>";
         // On ajoute la note du touite avec les 2 boutons pour le noter
         $html .= "<div class='evaluation'>";

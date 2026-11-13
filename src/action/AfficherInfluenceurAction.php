@@ -3,7 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererInfluenceur;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 /**
  * Constructeur de AfficherInfluenceurAction
@@ -24,7 +24,7 @@ class AfficherInfluenceurAction extends Action
      */
     public function execute(): string
     {
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
         $utilisateurs = $repo->getUtilisateurs();
         return "<h1>Influenceurs :</h1>" . RendererInfluenceur::rendererInfluenceur($utilisateurs);
     }

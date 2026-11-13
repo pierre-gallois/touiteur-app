@@ -80,14 +80,24 @@ class RepositoryBD extends Repository
         }
         $query->closeCursor();
 
-        // Touites (du plus ancien au plus récent)
-        $query = $this->pdo->query("select idTouite, pseudo, message, dateTouite from Touite order by dateTouite, idTouite");
+        // Touites (du plus ancien au plus récent) avec le chemin de leur image (null si pas d'image)
+        $query = $this->pdo->query("select t.idTouite, t.pseudo, t.message, t.dateTouite, i.chemin from Touite t"
+            . " left join Image i on i.idImage = t.idImage order by t.dateTouite, t.idTouite");
         $query->setFetchMode(PDO::FETCH_ASSOC);
         while ($info = $query->fetch()) {
             $auteur = $this->utilisateurs[$info['pseudo']]; // On récupère l'utilisateur/auteur
-            $touite = new Touite($info['message'], $auteur, $info['dateTouite'], (int) $info['idTouite']);
+            $touite = new Touite($info['message'], $auteur, $info['dateTouite'], $info['chemin']);
+            $touite->definirId((int) $info['idTouite']); // le touite garde l'id de la BDD
             $this->touites[$touite->id] = $touite;
             $auteur->ajouterTouite($touite); // On ajoute le touite à l'auteur
+        }
+        $query->closeCursor();
+
+        // Notes des touites
+        $query = $this->pdo->query("select pseudo, idTouite, valeur from Note");
+        $query->setFetchMode(PDO::FETCH_ASSOC);
+        while ($info = $query->fetch()) {
+            $this->touites[(int) $info['idTouite']]->noter($info['pseudo'], (int) $info['valeur']);
         }
         $query->closeCursor();
 
@@ -261,13 +271,23 @@ class RepositoryBD extends Repository
      */
     private function stockerTouite(Touite $touite): void
     {
+        // Son image s'il en a une (la BDD lui donne son id)
+        $idImage = null;
+        if ($touite->image !== null) {
+            $query = $this->pdo->prepare("insert into Image (chemin) values (?)");
+            $query->execute(array($touite->image));
+            $query->closeCursor();
+            $idImage = (int) $this->pdo->lastInsertId();
+        }
+
         // Le touite (nbTouites est mis à jour par le trigger trig_ajoutTouite)
         try {
-            $query = $this->pdo->prepare("insert into Touite (pseudo, message, dateTouite) values (?,?,?)");
+            $query = $this->pdo->prepare("insert into Touite (pseudo, message, dateTouite, idImage) values (?,?,?,?)");
             $query->execute(array(
                 $touite->auteur->pseudo,
                 $touite->message,
-                date('Y-m-d H:i:s', strtotime($touite->date)) // format DATETIME de MySQL
+                date('Y-m-d H:i:s', strtotime($touite->date)), // format DATETIME de MySQL
+                $idImage
             ));
             $query->closeCursor();
         } catch (PDOException $e) {
@@ -338,6 +358,27 @@ class RepositoryBD extends Repository
         $query->closeCursor();
 
         $utilisateur->suivreTag($tag);
+    }
+
+    /**
+     * Methode noterTouite qui enregistre la note d'un utilisateur sur un touite
+     * @param Utilisateur $utilisateur utilisateur qui note
+     * @param Touite $touite touite noté
+     * @param int $valeur +1 si approuvé, -1 si rejeté
+     * @return bool true si la note a été ajoutée, false si l'utilisateur avait déjà noté le touite
+     */
+    public function noterTouite(Utilisateur $utilisateur, Touite $touite, int $valeur): bool
+    {
+        $this->charger();
+
+        // Déjà noté : rien à faire (sinon erreur de clé primaire)
+        if (!$touite->noter($utilisateur->pseudo, $valeur)) return false;
+
+        $query = $this->pdo->prepare("insert into Note (pseudo, idTouite, valeur) values (?,?,?)");
+        $query->execute(array($utilisateur->pseudo, $touite->id, $valeur));
+        $query->closeCursor();
+
+        return true;
     }
 
 }

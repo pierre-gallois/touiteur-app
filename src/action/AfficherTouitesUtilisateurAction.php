@@ -1,7 +1,7 @@
 <?php
 
 namespace iutnc\touiteur\action;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 use iutnc\touiteur\render\RendererTouite;
 
 class AfficherTouitesUtilisateurAction extends Action {
@@ -10,7 +10,7 @@ class AfficherTouitesUtilisateurAction extends Action {
     public function execute() : string
     {
         // Récupération du repository
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupère le pseudo de l'utilisateur depuis l'URL
         $pseudo = $_GET['pseudo'] ?? '';

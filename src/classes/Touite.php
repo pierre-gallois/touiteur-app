@@ -64,6 +64,16 @@ class Touite {
     }
 
     /**
+     * Donne au touite l'id attribué par la base de données
+     * @param int $id
+     * @return void
+     */
+    public function definirId(int $id) : void
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Methode noter qui ajoute la note d'un utilisateur au touite
      * @param string $pseudo de l'utilisateur qui note
      * @param int $valeur de la note (+1 si approuvé, -1 si rejeté)

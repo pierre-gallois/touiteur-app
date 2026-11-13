@@ -18,25 +18,14 @@ use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\classes\Utilisateur;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
-use iutnc\touiteur\repository\RepoDev;
 
 // La session doit être démarrée avant toute lecture/écriture de $_SESSION.
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Chargement des données de démonstration.
-$repo = RepoDev::getInstance();
-$repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
-
 // L'utilisateur est connecté si on a bien un objet Utilisateur dans la session (cf. ConnexionAction)
 $connecte = isset($_SESSION['utilisateur']) && $_SESSION['utilisateur'] instanceof Utilisateur;
-
-// Après chaque requête, RepoDev est reconstruit.
-// On réinjecte donc l'utilisateur connecté conservé dans la session.
-if ($connecte) {
-    $repo->stocker($_SESSION['utilisateur']);
-}
 
 $dispatcher = (new Dispatcher())
     ->addRoute('login', ConnexionAction::class)

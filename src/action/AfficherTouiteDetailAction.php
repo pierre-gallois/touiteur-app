@@ -1,7 +1,7 @@
 <?php
 
 namespace iutnc\touiteur\action;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 use iutnc\touiteur\render\RendererTouite;
 
 class AfficherTouiteDetailAction extends Action {
@@ -10,7 +10,7 @@ class AfficherTouiteDetailAction extends Action {
     public function execute() : string
     {
         // Récupère le repository
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupère l'identifiant du touite dans l'URL
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
