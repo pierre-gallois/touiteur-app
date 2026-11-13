@@ -11,7 +11,7 @@ use iutnc\touiteur\action\ConnexionAction;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\DefaultAction;
-use iutnc\touiteur\repository\RepoBD;
+use iutnc\touiteur\repository\RepositoryBD;
 use iutnc\touiteur\action\ActionEvaluerTouite;
 use iutnc\touiteur\action\AfficherMurAction;
 use iutnc\touiteur\action\ActionAbonnerTag;
@@ -23,7 +23,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // Chargement des données de démonstration.
-$repo = RepoBD::getInstance();
+$repo = RepositoryBD::getInstance();
 $repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
 // Après chaque requête, RepoDev est reconstruit.
