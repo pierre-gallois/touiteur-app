@@ -15,6 +15,8 @@ use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\action\ActionEvaluerTouite;
 use iutnc\touiteur\action\AfficherMurAction;
+use iutnc\touiteur\action\AfficherTouitesTagAction;
+use iutnc\touiteur\action\ActionSuivreUtilisateur;
 
 // Démarrage de la session
 session_start();
@@ -37,6 +39,8 @@ $dispatcher = (new Dispatcher())
     ->addRoute('show-influenceurs', AfficherInfluenceurAction::class)
     ->addRoute('evaluer-touite', ActionEvaluerTouite::class)
     ->addRoute('mur', AfficherMurAction::class)
+    ->addRoute('touites-tag', AfficherTouitesTagAction::class)
+    ->addRoute('suivre-utilisateur', ActionSuivreUtilisateur::class)
     ->addRoute('default', DefaultAction::class);
 // Action demandée
 $action = $_GET['action'] ?? 'default';
