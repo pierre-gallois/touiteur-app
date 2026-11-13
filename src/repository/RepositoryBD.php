@@ -81,12 +81,12 @@ class RepositoryBD extends Repository
         $query->closeCursor();
 
         // Touites (du plus ancien au plus récent) avec le chemin de leur image (null si pas d'image)
-        $query = $this->pdo->query("select t.idTouite, t.pseudo, t.message, t.dateTouite, i.chemin from Touite t"
+        $query = $this->pdo->query("select t.idTouite, t.pseudo, t.message, t.dateTouite, i.chemin, i.description from Touite t"
             . " left join Image i on i.idImage = t.idImage order by t.dateTouite, t.idTouite");
         $query->setFetchMode(PDO::FETCH_ASSOC);
         while ($info = $query->fetch()) {
             $auteur = $this->utilisateurs[$info['pseudo']]; // On récupère l'utilisateur/auteur
-            $touite = new Touite($info['message'], $auteur, $info['dateTouite'], $info['chemin']);
+            $touite = new Touite($info['message'], $auteur, $info['dateTouite'], $info['chemin'], $info['description']);
             $touite->definirId((int) $info['idTouite']); // le touite garde l'id de la BDD
             $this->touites[$touite->id] = $touite;
             $auteur->ajouterTouite($touite); // On ajoute le touite à l'auteur
@@ -274,8 +274,8 @@ class RepositoryBD extends Repository
         // Son image s'il en a une (la BDD lui donne son id)
         $idImage = null;
         if ($touite->image !== null) {
-            $query = $this->pdo->prepare("insert into Image (chemin) values (?)");
-            $query->execute(array($touite->image));
+            $query = $this->pdo->prepare("insert into Image (chemin, description) values (?,?)");
+            $query->execute(array($touite->image, $touite->descriptionImage));
             $query->closeCursor();
             $idImage = (int) $this->pdo->lastInsertId();
         }
