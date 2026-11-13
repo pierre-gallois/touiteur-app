@@ -145,6 +145,40 @@ class RepositoryBD extends Repository
     }
 
     /**
+     * Methode stockerTag qui stocke un tag dans la BDD
+     * @param tag $t tag à stocker
+     * @return int id du tag
+     */
+    public function stockerTag(Tag $t) : int{
+
+        // Déjà dans la base
+        if($t->idTag !== null) return $t->idTag;
+
+        $libelle = $t->libelleTag;
+
+        // Un tag avec ce libelle est déjà dans la table
+        if(isset($this->tags[$libelle])){
+            $id = $this->tags[$libelle]->tag;
+            $t->definirId($id);
+            return $id;
+        }
+
+        // Limite définit par la BD
+        if (mb_strlen($libelle) > 20) {
+            throw new InvalidArgumentException("Le tag #$libelle est trop long.");
+        }
+
+        // Sinon on le stocke
+        $query = $this->pdo->prepare("insert into Tag (libelle, descriptionTag) values (?,?)");
+        $query->execute(array($libelle, $tag->descriptionTag));
+        $query->closeCursor();
+
+        $tag->definirId((int) $this->pdo->lastInsertId());
+        $this->tags[$libelle] = $tag;
+        return $tag->idTag;
+    }
+
+    /**
      * Methode suivreUtilisateur qui fait qu'un abonné suit un autre utilisateur
      * @param Utilisateur $abonne utilisateur qui va suivre quelqu'un
      * @param Utilisateur $suivi utilisateur qui sera suivi
