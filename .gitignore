@@ -9,8 +9,5 @@ composer.phar
 # PDF
 .pdf
 
-# Identifiants de la base de données (pas sur GitHub)
+# Identifiants de la base de données
 config/db.config.ini
-
-# Images envoyées par les utilisateurs
-/public/uploads/
