@@ -88,6 +88,15 @@ class RendererTouite {
         $html .= "<h2>" . $pseudo . "</h2>";
         $html .= "<p>" . $message . "</p>";
         $html .= "<div>" . $date . "</div>";
+        // On ajoute la note du touite avec les 2 boutons pour le noter
+        $html .= "<div class='evaluation'>";
+        $html .= "<form method='POST' action='index.php?action=evaluer-touite'>";
+        $html .= "<input type='hidden' name='idTouite' value='" . $touite->id . "'>";
+        $html .= "<button type='submit' class='like' name='choix' value='approuve'>Approuvé</button>";
+        $html .= "<span class='score'>" . $touite->note . "</span>";
+        $html .= "<button type='submit' class='dislike' name='choix' value='rejete'>Rejeté</button>";
+        $html .= "</form>";
+        $html .= "</div>";
         $html .= "</article>";
 
         return $html;
