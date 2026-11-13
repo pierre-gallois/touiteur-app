@@ -51,7 +51,7 @@ class ConnexionAction extends Action
 
         // Connexion de l'utilisateur
         $utilisateur->connecter();
-        $_SESSION['utilisateur_obj'] = $utilisateur;
+        $_SESSION['utilisateur'] = $utilisateur;
 
         // Redirection vers l'accueil
         header('Location: index.php');
