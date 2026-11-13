@@ -67,7 +67,13 @@ class Utilisateur {
     {
         if ($user !== $this) { // On vérifie que l'utilisateur ne veut pas s'auto-suivre
             // Vérifier que l'utilisateur ne le suit pas déjà avant de l'ajouter dans utilisateursSuivis.
-            if (!in_array($user, $this->utilisateursSuivis)) {
+            $dejaSuivi = false;
+            foreach ($this->utilisateursSuivis as $utilisateurSuivi) {
+                if ($utilisateurSuivi->pseudo === $user->pseudo) {
+                    $dejaSuivi = true;
+                }
+            }
+            if (!$dejaSuivi) {
                 $this->utilisateursSuivis[] = $user;
                 $user->utilisateursAbonnes[] = $this; // On ajoute à l'utilisateur qu'on suit, qu'on est abonné à lui
             }

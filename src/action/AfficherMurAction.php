@@ -4,7 +4,6 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
 use iutnc\touiteur\repository\RepoDev;
-use \InvalidArgumentException;
 
 /**
  * Action qui affiche le mur de l'utilisateur connecté avec le formulaire pour s'abonner à un tag
@@ -19,20 +18,7 @@ class AfficherMurAction extends Action {
         $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo
 
         // Récupération de l'utilisateur
-        try {
-            $utilisateur = $repo->getUtilisateur($pseudo);
-        } catch (InvalidArgumentException) {
-            // si c'est un nouvel utilisateur (= il n'est pas dans le JSON) on prend celui de la session
-            $utilisateur = $_SESSION['utilisateur'];
-        }
-
-        // On remet les tags auxquels l'utilisateur s'est abonné pendant sa session
-        // (RepoDev recharge le JSON à chaque page, donc sans ça les abonnements seraient perdus)
-        if (isset($_SESSION['tagsSuivis'])) {
-            foreach ($_SESSION['tagsSuivis'] as $libelleTag) {
-                $utilisateur->suivreTag($repo->getTag($libelleTag));
-            }
-        }
+        $utilisateur = $repo->getUtilisateur($pseudo);
 
         // structure html
         $html = "<h1>Mon mur</h1>";

@@ -15,33 +15,37 @@ class ActionAbonnerTag extends Action {
         $repo = RepoDev::getInstance();
 
         // Récupération des identifiants
+        $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo
+        $libelleTag = filter_input(INPUT_POST, 'libelleTag'); // renvoie false si ce n'est pas un simple texte (ex : un tableau)
+        if (!$libelleTag) {
+            return "<p>Ce tag n'existe pas</p><a href='index.php?action=mur'>Retour à mon mur</a>";
+        }
         // On retire les espaces et le # possible, vu que les tags sont enregistrés sans le # (ex : "testTag" et pas "#testTag")
-        $libelleTag = ltrim(trim($_POST['libelleTag'] ?? ''), '#');
-
-        // Lien pour revenir sur le mur (c'est là où se trouve le formulaire)
-        $lienMur = "<a href='index.php?action=mur'>Retour à mon mur</a>";
+        $libelleTag = ltrim(trim($libelleTag), '#');
 
         // Récupération des objets
+        $utilisateur = $repo->getUtilisateur($pseudo);
         try {
             $tag = $repo->getTag($libelleTag);
         } catch (InvalidArgumentException) {
-            return "<p>Ce tag n'existe pas</p>" . $lienMur;
+            return "<p>Ce tag n'existe pas</p><a href='index.php?action=mur'>Retour à mon mur</a>";
         }
 
-        // On crée la liste des tags suivis dans la session si elle n'existe pas encore
-        if (!isset($_SESSION['tagsSuivis'])) {
-            $_SESSION['tagsSuivis'] = [];
+        // On vérifie que l'utilisateur n'est pas déjà abonné à ce tag (sinon le tag serait en double)
+        $dejaAbonne = false;
+        foreach ($utilisateur->tagsSuivis as $tagSuivi) {
+            if ($tagSuivi->libelleTag === $tag->libelleTag) {
+                $dejaAbonne = true;
+            }
+        }
+        if ($dejaAbonne) {
+            return "<p>Vous êtes déjà abonné à ce tag</p><a href='index.php?action=mur'>Retour à mon mur</a>";
         }
 
-        // On vérifie que l'utilisateur n'est pas déjà abonné à ce tag
-        if (in_array($tag->libelleTag, $_SESSION['tagsSuivis'])) {
-            return "<p>Vous etes déjà abonné à ce tag là</p>" . $lienMur;
-        }
+        // Abonnement
+        $utilisateur->suivreTag($tag);
 
-        //on garde dans la session, sinon il on le perd à la page suivante
-        $_SESSION['tagsSuivis'][] = $tag->libelleTag;
-
-        return "<p>Abonnement au tag effectué !</p>" . $lienMur;
+        return "<p>Abonnement au tag effectué !</p><a href='index.php?action=mur'>Retour à mon mur</a>";
     }
 
 }
