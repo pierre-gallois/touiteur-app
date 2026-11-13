@@ -2,23 +2,20 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use iutnc\touiteur\action\AbonnerTag;
-use iutnc\touiteur\action\PublierTouite;
 use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherListeUtilisateursAction;
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
 use iutnc\touiteur\action\ConnexionAction;
-use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
-use iutnc\touiteur\action\AfficherListeTouiteAction;
-use iutnc\touiteur\action\AfficherInfluenceurAction;
 use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\action\ActionEvaluerTouite;
 use iutnc\touiteur\action\AfficherMurAction;
+use iutnc\touiteur\action\ActionAbonnerTag;
+use iutnc\touiteur\action\ActionPublierTouite;
 
 // La session doit être démarrée avant toute lecture/écriture de $_SESSION.
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -58,14 +55,16 @@ if (!$estConnecte && $action !== 'login') {
 }
 
 try {
-    echo $dispatcher->run();
+    // Récupère le contenu généré par l'action
+    $contenu = $dispatcher->run();
+
 } catch (DispatcherException $e) {
     http_response_code(404);
-    echo '<p>Page introuvable.</p>';
+    $contenu = '<p>Page introuvable.</p>';
 }
 
 // permet d'avoir un bon affichage css : squelette HTML minimal qui charge la feuille de style
-$classeBody = $connecte ? '' : 'page-connexion';
+$classeBody = $estConnecte ? '' : 'page-connexion';
 
 echo <<<HTML
 <!DOCTYPE html>
