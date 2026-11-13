@@ -12,6 +12,7 @@ class Tag {
     // Attributs
     private string $libelleTag; // libellé du tag, sans le caractère #
     private string $descriptionTag; // description du tag
+    private ?int $idTag = null; // Id du tag
 
     /**
      * Constructeur qui construit un tag
@@ -20,6 +21,7 @@ class Tag {
      * @throws InvalidTagException si le libellé est invalide
      */
     public function __construct(string $libelleTag, string $descriptionTag) {
+
         // On retire les espaces et le # éventuel au début
         $libelleTag = ltrim(trim($libelleTag), '#');
 
@@ -59,5 +61,15 @@ class Tag {
         } else {
             throw new InvalidPropertyException("L'attribut $name n'est pas un attribut de Tag");
         }
+    }
+
+    /**
+     * Donne au tag l'id attribué par la base de données
+     * @param int $id
+     * @return void
+     */
+    public function definirId(int $id) : void
+    {
+        $this->idTag = $id;
     }
 }
