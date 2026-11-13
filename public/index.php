@@ -37,8 +37,8 @@ if (isset($_SESSION['utilisateur_obj'])) {
 
 $dispatcher = (new Dispatcher())
     ->addRoute('login', ConnexionAction::class)
-    ->addRoute('abonner-tag', AbonnerTag::class)
-    ->addRoute('publier-touite', PublierTouite::class)
+    ->addRoute('abonner-tag', ActionAbonnerTag::class)
+    ->addRoute('publier-touite', ActionPublierTouite::class)
     ->addRoute('detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
     ->addRoute('liste-utilisateurs', AfficherListeUtilisateursAction::class)
