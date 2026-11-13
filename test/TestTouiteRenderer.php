@@ -16,7 +16,7 @@ $u = new Utilisateur(new Profil("Dupont", "Gérard", "dupont.gerard@gmail.com"),
 $u1 = new Utilisateur(new Profil("Jean", "Pierre", "jean.pierre@gmail.com"), "JeanPi");
 echo "<h1>Test afficher court</h1>";
 $touite = new Touite("Je découvris un paysage entièrement recouvert de neige. Les rues semblaient silencieuses, les arbres scintillaient sous les premiers rayons du soleil et, pour un instant, le temps paraissait s'être arrêté.", $u, "10.09.2016");
-echo RendererTouite::rendererCourt($touite);
+echo RendererTouite::rendererCourt($touite, $touite->id);
 
 echo"<h1>Test afficher touite detail</h1>";
 echo RendererTouite::aff_touite_detail($touite);
