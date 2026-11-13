@@ -2,192 +2,380 @@
 
 namespace iutnc\touiteur\repository;
 
-use http\Exception\InvalidArgumentException;
+use iutnc\touiteur\classes\Profil;
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\classes\Utilisateur;
+use iutnc\touiteur\classes\Tag;
 use PDO;
-use iutnc\touiteur\classes\tag;
-
+use InvalidArgumentException;
 
 /**
- * Classe permettant de faire communiquer notre application
- * avec la base de données
+ * Classe permettant de faire communiquer l'application
+ * avec la base de données.
  */
 class RepositoryBD extends Repository
 {
-// attributs
-    private PDO $pdo; // connection avec la base de donnée
-    private array $utilisateurs = []; // liste des utilisateurs
-    private array $tags = []; // liste des tags
-    private array $touites = []; // liste des touites
 
-
-// TODO connection
+    private PDO $pdo;
+    private array $utilisateurs = [];
+    private array $tags = [];
+    private array $touites = [];
+    private array $idTags = [];
+    private bool $charge = false;
 
     /**
-     * Méthode charger qui charge les donénes à partir de la BD
-     * @return void
-     * @throws \iutnc\touiteur\exception\LengthTouiteException erreur provenant de toutie
+     * Constructeur
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->pdo = ConnectionFactory::makeConnection();
+    }
+
+    /**
+     * Charge les données depuis la base de données.
      */
     private function charger(): void
     {
-        $res = $this->pdo->query("Select pseudo, nom, prenomn, email from utilisateur");
+        if ($this->charge) return;
+
+        $this->charge = true;
 
         // Utilisateurs
+        $res = $this->pdo->query(
+            "SELECT pseudo, nom, prenom, email FROM Profil"
+        );
+
         foreach ($res as $info) {
-            $u = new Utilisateur(new Profil($info['nom'], $info['prenom'], $info['email']), $info['pseudo']);
+            $u = new Utilisateur(
+                new Profil(
+                    $info['nom'],
+                    $info['prenom'],
+                    $info['email']
+                ),
+                $info['pseudo']
+            );
+
             $this->utilisateurs[$info['pseudo']] = $u;
         }
 
         // Tags
-        $res = $this->pdo->query("select id_tag, libelle, description from tag");
+        $res = $this->pdo->query(
+            "SELECT idTag, libelle, descriptionTag FROM Tag"
+        );
+
         foreach ($res as $info) {
-            $this->tags[$info['libelle']] = new Tag($info['Libelle'], $info['description']);
+            $tag = new Tag(
+                $info['libelle'],
+                $info['descriptionTag']
+            );
+
+            $this->tags[$info['libelle']] = $tag;
+            $this->idTags[$info['libelle']] = (int) $info['idTag'];
         }
 
-        // Touite
-        $res = $this->pdo->query("select idTouite, pseudo, message, dateTouite, idImage from touite");
+        // Touites
+        $res = $this->pdo->query(
+            "SELECT idTouite, pseudo, message, dateTouite, idImage FROM Touite"
+        );
+
         foreach ($res as $info) {
-            $auteur = $this->utilisateurs[$info['pseudo']]; // On récupère l'utilisateur/auteur
-            $touite = new Touite($info['message'], $auteur, $info['dateTouite'], $info['idTouite'], $info['idImage']);
+            $auteur = $this->utilisateurs[$info['pseudo']];
+
+            $touite = new Touite(
+                $info['message'],
+                $auteur,
+                $info['dateTouite'],
+                (int) $info['idTouite'],
+                (int) $info['idImage']
+            );
+
             $this->touites[$info['idTouite']] = $touite;
-            $auteur->ajouterTouite($touite); // On ajoute le touite à l'auteur
+            $auteur->ajouterTouite($touite);
         }
 
-        // Abonnes
-        $res = $this->pdo->query("select pseudoSuivis, pseudoAbonnes from abonnes");
+        // Abonnements entre utilisateurs
+        $res = $this->pdo->query(
+            "SELECT pseudoSuivis, pseudoAbonne FROM Abonnes"
+        );
+
         foreach ($res as $info) {
-            $this->utilisateurs[$info['pseudoAbonnes']]->suivreUtilisateur($this->$info['pseudoSuivis']);
+            $abonne = $this->utilisateurs[$info['pseudoAbonne']];
+            $suivi = $this->utilisateurs[$info['pseudoSuivis']];
+
+            $abonne->suivreUtilisateur($suivi);
         }
 
-        // AbonnesTag
-        $res = $this->pdo->query("select a.pseudo, a.idTag, t.libelle from AbonnesTag a "
-            . " inner join tag t on t.idTag = a.idTag");
+        // Abonnements aux tags
+        $res = $this->pdo->query(
+            "SELECT pseudo, idTag FROM AbonnesTag"
+        );
+
         foreach ($res as $info) {
-            $this->utilisateurs[$info['pseudo']->suivreTag($this->tags[$info['libelle']]);
-        }
+            $pseudo = $info['pseudo'];
+            $idTag = (int) $info['idTag'];
 
+            $libelle = array_search($idTag, $this->idTags, true);
+
+            if ($libelle !== false) {
+                $this->utilisateurs[$pseudo]->suivreTag(
+                    $this->tags[$libelle]
+                );
+            }
+        }
     }
 
     /**
-     * Methode getTouite pour avoir un Touite
-     * @param int $id du touite qu'on veut
-     * @return Touite le touite correspondant à l'id
-     * @throws \InvalidArgumentException si aucun touite n'a cet id
+     * Récupère un touite avec son identifiant.
      */
     public function getTouite(int $id): Touite
     {
-        $this->charger(); // On charge la BDD pour récupérer les dernières données
-        if (isset($this->touites[$id])) return $this->touites[$id];
-        throw new InvalidArgumentException("Aucun Touite avec cet id");
+        $this->charger();
+
+        if (isset($this->touites[$id])) {
+            return $this->touites[$id];
+        }
+
+        throw new InvalidArgumentException("Aucun touite avec cet id.");
     }
 
     /**
-     * Méthode getUtilisateur pour avoir un utilisateur
-     * @param string $pseudo de l'utilisateur qu'on veut
-     * @return Utilisateur qu'on a demandé
-     * @throws \InvalidArgumentException si aucun utilisateur n'a ce pseudo
+     * Récupère un utilisateur avec son pseudo.
      */
     public function getUtilisateur(string $pseudo): Utilisateur
     {
-        $this->charger(); // On charge la BDD pour récupérer les dernières données
-        if (isset($this->utilisateurs[$pseudo])) return $this->utilisateurs[$pseudo];
-        throw new InvalidArgumentException("Aucun utilisateur n'a ce pseudo");
+        $this->charger();
+
+        if (isset($this->utilisateurs[$pseudo])) {
+            return $this->utilisateurs[$pseudo];
+        }
+
+        throw new InvalidArgumentException("Aucun utilisateur avec ce pseudo.");
     }
 
     /**
-     * Methode getTouites qui retourne la liste des touites
-     * @return array la liste des touites
-     * @throws \iutnc\touiteur\exception\LengthTouiteException erreur que peuvent générer les touites
+     * Récupère un tag avec son libellé.
+     */
+    public function getTag(string $libelle): Tag
+    {
+        $this->charger();
+
+        if (isset($this->tags[$libelle])) {
+            return $this->tags[$libelle];
+        }
+
+        throw new InvalidArgumentException("Aucun tag avec ce libellé.");
+    }
+
+    /**
+     * Récupère tous les touites.
      */
     public function getTouites(): array
     {
-        $this->charger(); // On charge la BDD pour récupérer les dernières données
+        $this->charger();
         return $this->touites;
     }
 
     /**
-     * Méthode getUtilisateurs pour avoir la liste des utilisateurs
-     * @return array la liste des utilisateur
-     * @throws \iutnc\touiteur\exception\LengthTouiteException
+     * Récupère tous les utilisateurs.
      */
     public function getUtilisateurs(): array
     {
-        $this->charger(); // On charge la BDD pour récupérer les dernières données
+        $this->charger();
         return $this->utilisateurs;
     }
 
     /**
-     * Méthode getTags pour avoir la liste des tags
-     * @return array la liste des tags
-     * @throws \iutnc\touiteur\exception\LengthTouiteException
+     * Récupère tous les tags.
      */
     public function getTags(): array
     {
-        $this->charger(); // On charge la BDD pour récupérer les dernières données
+        $this->charger();
         return $this->tags;
     }
 
     /**
-     * Méthode stockerUtilisateur qui stocke un utilisateur dans la BDD
-     * @param Utilisateur $u utilisateur à stocker
-     * @return void
+     * Stocke un utilisateur dans la base de données.
      */
-    private function stockerUtilisateur(Utilisateur $u) : void
+    private function stockerUtilisateur(Utilisateur $u): void
     {
-        // Déjà dans la base alors on le stocke pas
-        if (isset($this->utilisateurs[$u->['pseudo']])) return;
+        if (isset($this->utilisateurs[$u->pseudo])) return;
 
-        // Sinon on le stocke
-        $this->pdo->prepare("insert into profil (pseudo, prenom, nom, email) values (?,?,?,?)");
-        $this->pdo->exec([$u->pseudo, $u->prenom, $u->nom, $u->email]);
+        $requete = $this->pdo->prepare(
+            "INSERT INTO Profil (pseudo, prenom, nom, email)
+             VALUES (?, ?, ?, ?)"
+        );
+
+        $requete->execute([
+            $u->pseudo,
+            $u->profil->prenom,
+            $u->profil->nom,
+            $u->profil->email
+        ]);
+
         $this->utilisateurs[$u->pseudo] = $u;
     }
 
     /**
-     * Methode stockerTag qui stocke un tag dans la BDD
-     * @param tag $t tag à stocker
-     * @return int id du tag
+     * Stocke un tag dans la base de données.
      */
-    public function stockerTag(Tag $t) : int{
-
-        // Déjà dans la base
-        if($t->idTag !== null) return $t->idTag;
+    public function stockerTag(Tag $t): int
+    {
+        $this->charger();
 
         $libelle = $t->libelleTag;
 
-        // Un tag avec ce libelle est déjà dans la table
-        if(isset($this->tags[$libelle])){
-            $id = $this->tags[$libelle]->tag;
-            $t->definirId($id);
-            return $id;
+        // Le tag existe déjà
+        if (isset($this->idTags[$libelle])) {
+            return $this->idTags[$libelle];
         }
 
-        // Limite définit par la BD
-        if (mb_strlen($libelle) > 20) {
-            throw new InvalidArgumentException("Le tag #$libelle est trop long.");
+        // Vérification de la longueur
+        if (mb_strlen($libelle, 'UTF-8') > 20) {
+            throw new InvalidArgumentException("Le tag est trop long.");
         }
 
-        // Sinon on le stocke
-        $query = $this->pdo->prepare("insert into Tag (libelle, descriptionTag) values (?,?)");
-        $query->execute(array($libelle, $tag->descriptionTag));
-        $query->closeCursor();
+        $requete = $this->pdo->prepare(
+            "INSERT INTO Tag (libelle, descriptionTag)
+             VALUES (?, ?)"
+        );
 
-        $tag->definirId((int) $this->pdo->lastInsertId());
-        $this->tags[$libelle] = $tag;
-        return $tag->idTag;
+        $requete->execute([
+            $libelle,
+            $t->descriptionTag
+        ]);
+
+        $id = (int) $this->pdo->lastInsertId();
+
+        $this->tags[$libelle] = $t;
+        $this->idTags[$libelle] = $id;
+
+        return $id;
     }
 
     /**
-     * Methode suivreUtilisateur qui fait qu'un abonné suit un autre utilisateur
-     * @param Utilisateur $abonne utilisateur qui va suivre quelqu'un
-     * @param Utilisateur $suivi utilisateur qui sera suivi
-     * @return void
+     * Stocke un touite et ses tags dans la base de données.
      */
-    public function suivreUtilisateur(Utilisateur $abonne, Utilisateur $suivi){
-        $this->pdo->prepare("insert into Abonnes values (?,?)");
-        $this->pdo->exec([$suivi->pseudo, $abonne->pseudo]);
+    private function stockerTouite(Touite $t): void
+    {
+        $this->charger();
+
+        $pseudo = $t->auteur->pseudo;
+
+        if (!isset($this->utilisateurs[$pseudo])) {
+            throw new InvalidArgumentException(
+                "L'auteur du touite n'existe pas dans la base."
+            );
+        }
+
+        try {
+            $this->pdo->beginTransaction();
+
+            // Insertion du touite
+            $requete = $this->pdo->prepare(
+                "INSERT INTO Touite (pseudo, message, dateTouite, idImage)
+                 VALUES (?, ?, ?, ?)"
+            );
+
+            $requete->execute([
+                $pseudo,
+                $t->message,
+                $t->date,
+                $t->idImage
+            ]);
+
+            $idTouite = (int) $this->pdo->lastInsertId();
+
+            // Insertion des tags associés
+            foreach ($t->tags as $tag) {
+                $idTag = $this->stockerTag($tag);
+
+                $requeteTag = $this->pdo->prepare(
+                    "INSERT INTO TouiteTag (idTouite, idTag)
+                     VALUES (?, ?)"
+                );
+
+                $requeteTag->execute([
+                    $idTouite,
+                    $idTag
+                ]);
+            }
+
+            $this->pdo->commit();
+
+            // Mise à jour en mémoire
+            $t->definirId($idTouite);
+
+            $this->touites[$idTouite] = $t;
+
+            $this->utilisateurs[$pseudo]->ajouterTouite($t);
+
+        } catch (\Throwable $e) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Stocke une donnée selon son type.
+     */
+    public function stocker(mixed $data): void
+    {
+        if ($data instanceof Utilisateur) {
+            $this->stockerUtilisateur($data);
+        } elseif ($data instanceof Tag) {
+            $this->stockerTag($data);
+        } elseif ($data instanceof Touite) {
+            $this->stockerTouite($data);
+        } else {
+            throw new InvalidArgumentException("Type de donnée inconnu.");
+        }
+    }
+
+    /**
+     * Permet à un utilisateur de suivre un autre utilisateur.
+     */
+    public function suivreUtilisateur(
+        Utilisateur $abonne,
+        Utilisateur $suivi
+    ): void {
+        $this->charger();
+
+        $requete = $this->pdo->prepare(
+            "INSERT IGNORE INTO Abonnes (pseudoSuivis, pseudoAbonne)
+             VALUES (?, ?)"
+        );
+
+        $requete->execute([
+            $suivi->pseudo,
+            $abonne->pseudo
+        ]);
+
         $abonne->suivreUtilisateur($suivi);
     }
 
+    /**
+     * Permet à un utilisateur de suivre un tag.
+     */
+    public function suivreTag(Utilisateur $utilisateur, Tag $tag): void
+    {
+        $this->charger();
+
+        $idTag = $this->stockerTag($tag);
+
+        $requete = $this->pdo->prepare(
+            "INSERT IGNORE INTO AbonnesTag (pseudo, idTag)
+             VALUES (?, ?)"
+        );
+
+        $requete->execute([
+            $utilisateur->pseudo,
+            $idTag
+        ]);
+
+        $utilisateur->suivreTag($tag);
+    }
 }
