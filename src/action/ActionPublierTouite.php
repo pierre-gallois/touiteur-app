@@ -5,7 +5,7 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\exception\LengthTouiteException;
 use iutnc\touiteur\render\RendererTouite;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepoBD;
 
 /**
  * Classe PublierTouiteAction qui permet l'intéraction avec l'utilisateur de publier un touite
@@ -28,7 +28,7 @@ class ActionPublierTouite extends Action {
        $utilisateur = $_SESSION['utilisateur'];
 
        // Récupérer le repository
-       $repo = RepoDev::getInstance();
+       $repo = RepoBD::getInstance();
 
        // Réenregistrer l'utilisateur dans le repository
        $repo->stocker($utilisateur);
