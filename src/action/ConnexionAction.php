@@ -52,6 +52,8 @@ class ConnexionAction extends Action
         // Connexion de l'utilisateur
         $utilisateur->connecter();
         $_SESSION['utilisateur'] = $utilisateur;
+        // On vide les tags suivis de la session précédente (sinon un autre utilisateur les garderait)
+        $_SESSION['tagsSuivis'] = [];
 
         // Redirection vers l'accueil
         header('Location: index.php');
