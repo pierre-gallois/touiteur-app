@@ -202,7 +202,7 @@ article > p:nth-child(2) {
 
 /* date */
 article > p:last-child:not(:first-child),
-article > div:last-child {
+article > div:not(.evaluation) {
     display: inline-block;
     margin-top: 12px;
     padding: 2px 8px;
@@ -214,7 +214,7 @@ article > div:last-child {
     border-radius: 6px;
 }
 article > p:last-child:not(:first-child)::before,
-article > div:last-child::before { content: "📅 "; }
+article > div:not(.evaluation)::before { content: "📅 "; }
 
 /* Carte + lien "Voir tout le touite" : le lien devient un bouton accroché */
 article:has(+ a) { margin-bottom: 0; }
@@ -639,7 +639,7 @@ input[type="file"]::file-selector-button {
 }
 input[type="file"]::file-selector-button:hover { background: var(--jaune); }
 
-/* Évaluation : <div class="evaluation"><button class="like">👍</button><span class="score">12</span><button class="dislike">👎</button></div> */
+/* Évaluation : <div class="evaluation"><button class="like">✅ Approuvé</button><span class="score">12</span><button class="dislike">❌ Rejeté</button></div> */
 .evaluation {
     display: inline-flex;
     align-items: center;
@@ -655,14 +655,16 @@ input[type="file"]::file-selector-button:hover { background: var(--jaune); }
 .like, .dislike {
     align-self: auto;
     margin: 0;
-    width: 38px;
-    height: 38px;
-    padding: 0;
-    font-family: var(--police);
-    font-size: 1.05rem;
-    border-radius: 50%;
+    padding: 6px 14px;
+    font-family: var(--titre);
+    font-size: .8rem;
+    text-transform: uppercase;
+    border-radius: 999px;
     box-shadow: 2px 2px 0 var(--encre);
 }
+/* effet "tampon" au survol */
+.like:hover { transform: rotate(-4deg) scale(1.06); }
+.dislike:hover { transform: rotate(4deg) scale(1.06); }
 .like { background: var(--menthe); }
 .dislike { background: var(--rouge); }
 .score {
