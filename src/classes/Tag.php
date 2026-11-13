@@ -12,14 +12,18 @@ class Tag {
     // Attributs
     private string $libelleTag; // libellé du tag, sans le caractère #
     private string $descriptionTag; // description du tag
+    private int $idTag; // Id du tag
 
     /**
      * Constructeur qui construit un tag
+     * @param int $idTag id du tag
      * @param string $libelleTag libellé du tag
      * @param string $descriptionTag description du tag
      * @throws InvalidTagException si le libellé est invalide
      */
-    public function __construct(string $libelleTag, string $descriptionTag) {
+    public function __construct(string $libelleTag, string $descriptionTag, int $idTag) {
+        $this->idTag = $idTag;
+
         // On retire les espaces et le # éventuel au début
         $libelleTag = ltrim(trim($libelleTag), '#');
 
