@@ -2,7 +2,8 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
+use iutnc\touiteur\exception\BDException;
 use \InvalidArgumentException;
 
 /**
@@ -12,7 +13,7 @@ class ActionSuivreUtilisateur extends Action {
 
     public function execute(): string {
 
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // récupération des identifiants
         $monPseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo
@@ -50,8 +51,13 @@ class ActionSuivreUtilisateur extends Action {
             return "<p>Vous suivez déjà cet utilisateur</p>" . $lienMur;
         }
 
-        // abonnement
-        $utilisateur->suivreUtilisateur($utilisateurASuivre);
+        // abonnement (enregistré dans la base de données)
+        try {
+            $repo->suivreUtilisateur($utilisateur, $utilisateurASuivre);
+        } catch (BDException $e) {
+            // refus de la base (trigger : se suivre soi-même ou même email)
+            return "<p>" . filter_var($e->getMessage(), FILTER_SANITIZE_SPECIAL_CHARS) . "</p>" . $lienMur;
+        }
 
         $pseudoAffiche = filter_var($utilisateurASuivre->pseudo, FILTER_SANITIZE_SPECIAL_CHARS);
         return "<p>Vous suivez maintenant " . $pseudoAffiche . " !</p>" . $lienMur;

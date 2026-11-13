@@ -4,8 +4,9 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\exception\LengthTouiteException;
+use iutnc\touiteur\exception\BDException;
 use iutnc\touiteur\render\RendererTouite;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 /**
  * Classe PublierTouiteAction qui permet l'intéraction avec l'utilisateur de publier un touite
@@ -24,14 +25,11 @@ class ActionPublierTouite extends Action {
            return "<p>Erreur : vous devez être connecté.</p>";
        }
 
-       // Récupérer l'objet Utilisateur depuis la session
-       $utilisateur = $_SESSION['utilisateur'];
-
        // Récupérer le repository
-       $repo = RepoDev::getInstance();
+       $repo = RepositoryBD::getInstance();
 
-       // Réenregistrer l'utilisateur dans le repository
-       $repo->stocker($utilisateur);
+       // Récupérer l'utilisateur depuis la base (on a l'objet Utilisateur dans la session, donc on prend son pseudo)
+       $utilisateur = $repo->getUtilisateur($_SESSION['utilisateur']->pseudo);
 
        // Structure HTML
        $html = "<h1>Publier un touite</h1>";
@@ -39,7 +37,6 @@ class ActionPublierTouite extends Action {
        $touite = null;
         // On regarde si le formulaire a bien été envoyé
         if ($this->http_method === 'POST') {
-            var_dump($_FILES);
             $message = trim($_POST['message'] ?? '');
             $imagePath = null;
             $erreurImage = null;
@@ -122,7 +119,7 @@ class ActionPublierTouite extends Action {
                     // Ajout du touite à l'utilisateur
                     $utilisateur->ajouterTouite($touite);
 
-                    // Enregistrement du touite dans RepoDev
+                    // Enregistrement du touite dans la base de données
                     $repo->stocker($touite);
 
                     // Rendu HTML
@@ -130,6 +127,10 @@ class ActionPublierTouite extends Action {
 
                 } catch (LengthTouiteException $e) {
                     $html .= "<p>{$e->getMessage()}</p>";
+                } catch (BDException $e) {
+                    // refus de la base (ex : trigger anti-spam, tag trop long)
+                    $touite = null;
+                    $html .= "<p>" . filter_var($e->getMessage(), FILTER_SANITIZE_SPECIAL_CHARS) . "</p>";
                 }
             }
         }

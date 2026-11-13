@@ -2,7 +2,7 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 class AfficherListeUtilisateursAction extends Action
 {
@@ -10,7 +10,7 @@ class AfficherListeUtilisateursAction extends Action
     public function execute(): string
     {
         // Récupération du repository
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupération de tous les utilisateurs
         $utilisateurs = $repo->getUtilisateurs();

@@ -3,7 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\render\RendererTouite;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 /**
  * Clase AfficherListeTouiteAction
@@ -22,7 +22,7 @@ class AfficherListeTouiteAction extends Action {
      */
     public function execute() : string
     {
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
         $touites = $repo->getTouites();
         return "<h1>Touites</h1>" . RendererTouite::afficherListeTouite($touites);
     }

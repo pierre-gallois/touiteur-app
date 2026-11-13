@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\classes\Profil;
 use iutnc\touiteur\classes\Utilisateur;
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 
 /**
  * Gère l'affichage du formulaire et la connexion d'un utilisateur.
@@ -27,7 +27,7 @@ class ConnexionAction extends Action
             return self::formulaireConnexion('Veuillez saisir un pseudo.');
         }
 
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Si le pseudo existe déjà, on reconnecte cet utilisateur.
         try {
@@ -42,6 +42,14 @@ class ConnexionAction extends Action
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return self::formulaireConnexion('Adresse email invalide.');
+            }
+
+            // Tailles maximum des colonnes de la table Profil (sinon la base refuse l'inscription)
+            if (mb_strlen($pseudo) > 20 || mb_strlen($prenom) > 20) {
+                return self::formulaireConnexion('Le pseudo et le prénom font 20 caractères maximum.');
+            }
+            if (mb_strlen($nom) > 50 || mb_strlen($email) > 50) {
+                return self::formulaireConnexion("Le nom et l'email font 50 caractères maximum.");
             }
 
             $profil = new Profil($nom, $prenom, $email);

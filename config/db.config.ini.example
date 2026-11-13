@@ -1,0 +1,5 @@
+; Copier ce fichier en db.config.ini et mettre ses identifiants (db.config.ini n'est pas envoyé sur GitHub)
+host = localhost
+database = nom_de_la_base
+username = login
+password = mot_de_passe

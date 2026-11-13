@@ -2,7 +2,7 @@
 
 namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\repository\RepoDev;
+use iutnc\touiteur\repository\RepositoryBD;
 use \InvalidArgumentException;
 
 /**
@@ -12,7 +12,7 @@ class ActionAbonnerTag extends Action {
 
     public function execute(): string {
 
-        $repo = RepoDev::getInstance();
+        $repo = RepositoryBD::getInstance();
 
         // Récupération des identifiants
         $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo
@@ -42,8 +42,8 @@ class ActionAbonnerTag extends Action {
             return "<p>Vous êtes déjà abonné à ce tag</p><a href='index.php?action=mur'>Retour à mon mur</a>";
         }
 
-        // Abonnement
-        $utilisateur->suivreTag($tag);
+        // Abonnement (enregistré dans la base de données)
+        $repo->suivreTag($utilisateur, $tag);
 
         return "<p>Abonnement au tag effectué !</p><a href='index.php?action=mur'>Retour à mon mur</a>";
     }
