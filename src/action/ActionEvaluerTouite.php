@@ -16,7 +16,7 @@ class ActionEvaluerTouite extends Action {
         $repo = RepoDev::getInstance();
 
         // Récupération des identifiants
-        $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur, donc on prend son pseudo
+        $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo (meme chose que AbonnerTag)
         $idTouite = $_POST['idTouite'] ?? '';
         $choix = $_POST['choix'] ?? '';
 

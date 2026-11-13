@@ -15,7 +15,7 @@ class ActionAbonnerTag extends Action {
         $repo = RepoDev::getInstance();
 
         // Récupération des identifiants
-        $pseudo = $_SESSION['utilisateur'];
+        $pseudo = $_SESSION['utilisateur']->pseudo; // on a l'objet Utilisateur dans la session, donc on prend son pseudo
         // On retire les espaces et le # possible, vu que les tags sont enregistrés sans le # (ex : "testTag" et pas "#testTag")
         $libelleTag = ltrim(trim($_POST['libelleTag'] ?? ''), '#');
 
