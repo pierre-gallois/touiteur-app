@@ -1,12 +1,16 @@
 <?php
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use iutnc\touiteur\action\AbonnerTag;
+use iutnc\touiteur\action\PublierTouite;
+use iutnc\touiteur\action\AfficherInfluenceurAction;
+use iutnc\touiteur\action\AfficherListeTouiteAction;
 use iutnc\touiteur\action\AfficherListeUtilisateursAction;
 use iutnc\touiteur\action\AfficherTouiteDetailAction;
 use iutnc\touiteur\action\AfficherTouitesUtilisateurAction;
-use iutnc\touiteur\action\ActionAbonnerTag;
-use iutnc\touiteur\action\ActionPublierTouite;
 use iutnc\touiteur\action\ConnexionAction;
+use iutnc\touiteur\action\DefaultAction;
 use iutnc\touiteur\dispatcher\Dispatcher;
 use iutnc\touiteur\exception\DispatcherException;
 use iutnc\touiteur\action\AfficherListeTouiteAction;
@@ -16,20 +20,25 @@ use iutnc\touiteur\repository\RepoDev;
 use iutnc\touiteur\action\ActionEvaluerTouite;
 use iutnc\touiteur\action\AfficherMurAction;
 
-// Démarrage de la session
-session_start();
+// La session doit être démarrée avant toute lecture/écriture de $_SESSION.
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-
-// Chargement des données
+// Chargement des données de démonstration.
 $repo = RepoDev::getInstance();
 $repo->chargerDonnees(__DIR__ . '/../config/dev_dummy_data.json');
 
+// Après chaque requête, RepoDev est reconstruit.
+// On réinjecte donc l'utilisateur connecté conservé dans la session.
+if (isset($_SESSION['utilisateur_obj'])) {
+    $repo->stocker($_SESSION['utilisateur_obj']);
+}
 
-// Création Dispatcher
 $dispatcher = (new Dispatcher())
     ->addRoute('login', ConnexionAction::class)
-    ->addRoute('abonner-tag', ActionAbonnerTag::class)
-    ->addRoute('publier-touite', ActionPublierTouite::class)
+    ->addRoute('abonner-tag', AbonnerTag::class)
+    ->addRoute('publier-touite', PublierTouite::class)
     ->addRoute('detail', AfficherTouiteDetailAction::class)
     ->addRoute('touites-utilisateur', AfficherTouitesUtilisateurAction::class)
     ->addRoute('liste-utilisateurs', AfficherListeUtilisateursAction::class)
@@ -38,47 +47,21 @@ $dispatcher = (new Dispatcher())
     ->addRoute('evaluer-touite', ActionEvaluerTouite::class)
     ->addRoute('mur', AfficherMurAction::class)
     ->addRoute('default', DefaultAction::class);
-// Action demandée
+
 $action = $_GET['action'] ?? 'default';
-// Le contenu est calculé AVANT tout affichage (sinon header() de ConnexionAction ne marcherait plus)
-$connecte = !empty($_SESSION['utilisateur']);
+$estConnecte = isset($_SESSION['utilisateur_obj']) && $_SESSION['utilisateur_obj'] instanceof \iutnc\touiteur\classes\Utilisateur;
 
-// Vérifie si l'utilisateur est connecté
-if ($connecte || $action === "login") {
+// Un visiteur non connecté ne peut accéder qu'au formulaire de connexion.
+if (!$estConnecte && $action !== 'login') {
+    echo (new ConnexionAction())->execute();
+    exit;
+}
 
-    // Exécution de l'action
-    try {
-        $contenu = $dispatcher->run();
-    } catch (DispatcherException $e) {
-        $contenu = "404 : Not found.";
-    }
-
-} else {
-
-    // Affichage de la page de connexion
-    $contenu = '
-    <h1>Bienvenue sur Touiteur</h1>
-
-    <h2>Connexion</h2>
-
-    <form method="POST" action="index.php?action=login">
-
-        <label for="pseudo">Pseudo :</label>
-        <input type="text" name="pseudo" id="pseudo" required>
-
-        <label for="nom">Nom :</label>
-        <input type="text" name="nom" id="nom">
-
-        <label for="prenom">Prénom :</label>
-        <input type="text" name="prenom" id="prenom">
-
-        <label for="email">Email :</label>
-        <input type="email" name="email" id="email">
-
-        <button type="submit">Se connecter</button>
-
-    </form>
-    ';
+try {
+    echo $dispatcher->run();
+} catch (DispatcherException $e) {
+    http_response_code(404);
+    echo '<p>Page introuvable.</p>';
 }
 
 // permet d'avoir un bon affichage css : squelette HTML minimal qui charge la feuille de style
