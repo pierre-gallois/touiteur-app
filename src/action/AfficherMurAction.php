@@ -26,14 +26,6 @@ class AfficherMurAction extends Action {
             $utilisateur = $_SESSION['utilisateur'];
         }
 
-        // On remet les tags auxquels l'utilisateur s'est abonné pendant sa session
-        // (RepoDev recharge le JSON à chaque page, donc sans ça les abonnements seraient perdus)
-        if (isset($_SESSION['tagsSuivis'])) {
-            foreach ($_SESSION['tagsSuivis'] as $libelleTag) {
-                $utilisateur->suivreTag($repo->getTag($libelleTag));
-            }
-        }
-
         // structure html
         $html = "<h1>Mon mur</h1>";
 

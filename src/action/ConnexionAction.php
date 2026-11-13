@@ -18,7 +18,7 @@ class ConnexionAction extends Action
 
         // Vérification du pseudo
         if ($pseudo === '') {
-            return '<p>Veuillez saisir un pseudo.</p>';
+            return "<p>Veuillez saisir un pseudo.</p><a href='index.php'>retour à la connexion</a>";
         }
 
         // Récupération du repository
@@ -32,11 +32,12 @@ class ConnexionAction extends Action
 
             // Si l'utilisateur n'existe pas
             if ($nom === '' || $prenom === '' || $email === '') {
-                return '';
+                return "<p>Ce pseudo existe pas</p>"
+                    . "<a href='index.php'>retour à la connexion</a>";
             }
             // Vérification de l'adresse email
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return "<p>Adresse email invalide.</p>";
+                return "<p>Adresse email invalide.</p><a href='index.php'>retour à la connexion</a>";
             }
 
             // Création du profil
@@ -52,8 +53,6 @@ class ConnexionAction extends Action
         // Connexion de l'utilisateur
         $utilisateur->connecter();
         $_SESSION['utilisateur'] = $utilisateur;
-        // On vide les tags suivis de la session précédente (sinon un autre utilisateur les garderait)
-        $_SESSION['tagsSuivis'] = [];
 
         // Redirection vers l'accueil
         header('Location: index.php');
