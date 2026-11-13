@@ -6,6 +6,8 @@ use http\Exception\InvalidArgumentException;
 use iutnc\touiteur\classes\Touite;
 use iutnc\touiteur\classes\Utilisateur;
 use PDO;
+use iutnc\touiteur\classes\tag;
+
 
 /**
  * Classe permettant de faire communiquer notre application
@@ -124,6 +126,34 @@ class RepositoryBD extends Repository
     {
         $this->charger(); // On charge la BDD pour récupérer les dernières données
         return $this->tags;
+    }
+
+    /**
+     * Méthode stockerUtilisateur qui stocke un utilisateur dans la BDD
+     * @param Utilisateur $u utilisateur à stocker
+     * @return void
+     */
+    private function stockerUtilisateur(Utilisateur $u) : void
+    {
+        // Déjà dans la base alors on le stocke pas
+        if (isset($this->utilisateurs[$u->['pseudo']])) return;
+
+        // Sinon on le stocke
+        $this->pdo->prepare("insert into profil (pseudo, prenom, nom, email) values (?,?,?,?)");
+        $this->pdo->exec([$u->pseudo, $u->prenom, $u->nom, $u->email]);
+        $this->utilisateurs[$u->pseudo] = $u;
+    }
+
+    /**
+     * Methode suivreUtilisateur qui fait qu'un abonné suit un autre utilisateur
+     * @param Utilisateur $abonne utilisateur qui va suivre quelqu'un
+     * @param Utilisateur $suivi utilisateur qui sera suivi
+     * @return void
+     */
+    public function suivreUtilisateur(Utilisateur $abonne, Utilisateur $suivi){
+        $this->pdo->prepare("insert into Abonnes values (?,?)");
+        $this->pdo->exec([$suivi->pseudo, $abonne->pseudo]);
+        $abonne->suivreUtilisateur($suivi);
     }
 
 }
